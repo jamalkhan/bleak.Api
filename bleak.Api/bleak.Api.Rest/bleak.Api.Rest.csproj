@@ -2,6 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageVersion>0.8.0.0</PackageVersion>
+    <Authors>Jamal Khan</Authors>
+    <PackageLicenseUrl>https://github.com/jamalkhan/bleak.Api/blob/master/LICENSE</PackageLicenseUrl>
+    <Owners>Jamal Khan</Owners>
+    <PackageProjectUrl>https://github.com/jamalkhan/bleak.Api/</PackageProjectUrl>
+    <Summary>The RestManager and other tools in bleak.Api.Rest are designed to make access REST APIs easier from .NET</Summary>
+    <Title>bleak.Api.Rest</Title>
+    <Description>The RestManager and other tools in bleak.Api.Rest are designed to make access REST APIs easier from .NET</Description>
+    <PackageId>bleak.Api.Rest</PackageId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+  </ItemGroup>
 </Project>
