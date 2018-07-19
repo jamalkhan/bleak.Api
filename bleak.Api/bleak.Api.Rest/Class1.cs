@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 
 namespace bleak.Api.Rest
@@ -72,6 +71,8 @@ namespace bleak.Api.Rest
 
     public static class RestExtensionMethods
     {
+        // TODO: Figure out how to parse the query string in .NET Standard 1.3 or below
+        /*
         public static void AddQueryParameter(this UriBuilder builder, string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -89,6 +90,7 @@ namespace bleak.Api.Rest
             var sortedDict = new SortedDictionary<string, string>(col.AllKeys.ToDictionary(k => k, k => col[k]));
             return sortedDict;
         }
+        */
 
         public static string UrlEncode(this string stringToUrlEncode)
         {

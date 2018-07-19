@@ -217,14 +217,14 @@ namespace bleak.Api.Rest
                 parameters: parameters,
                 boundary: formDataBoundary,
                 encoding: encoding);
-            
-            request.ContentLength = formData.Length;
 
             // Send the form data to the request.
-            using (var requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(formData, 0, formData.Length);
-            }
+            throw new NotImplementedException("Sorry Guys, Still a WIP");
+            //TODO: Uncomment this block:
+            //using (var requestStream = request.GetRequestStream())
+            //{
+            //    requestStream.Write(formData, 0, formData.Length);
+            //}
         }
         /// <summary>
         /// Gets the multipart form data.
@@ -288,7 +288,9 @@ namespace bleak.Api.Rest
             formDataStream.Position = 0;
             var formData = new byte[formDataStream.Length];
             formDataStream.Read(formData, 0, formData.Length);
-            formDataStream.Close();
+            // TODO: Do we need to close this any more? .NET Standard 1.3
+            //formDataStream.Close();
+            
 
             return formData;
         }
@@ -304,7 +306,9 @@ namespace bleak.Api.Rest
             ref RequestResponseSummary<TSuccess, TError> summary,
             HttpWebRequest httpWebRequest)
         {
-            var response = httpWebRequest.GetResponse();
+            var asyncResponse = httpWebRequest.GetResponseAsync();
+            // TODO: Should probably change this to suppor true Async behavior.
+            var response = asyncResponse.Result;
             try
             {
                 ProcessResponse<TSuccess, TError>(
@@ -319,6 +323,8 @@ namespace bleak.Api.Rest
                 }
             }
         }
+
+        
         /// <summary>
         /// TODO: Could probably consolidate with ExecuteRestMethod if formParameters can be &= or multiparted.
         /// </summary>
@@ -331,12 +337,16 @@ namespace bleak.Api.Rest
             HttpWebRequest httpWebRequest
             )
         {
-            using (var response = httpWebRequest.GetResponse())
+            var asyncresponse = httpWebRequest.GetResponseAsync();
+            // TODO: Implement a true Async experience
+
+            using (var response = asyncresponse.Result)
             {
                 ProcessResponse<TSuccess, TError>(
                     summary: ref summary,
                     response: response);
             }
+            
         }
 
         /// <summary>
@@ -403,7 +413,10 @@ namespace bleak.Api.Rest
                 {
                     summary.SerializedRequest = serializedPayload;
                 }
-                using (var stream = new StreamWriter(httpWebRequest.GetRequestStream()))
+
+                // TODO: Really make this an Async behavior
+                var asyncResult = httpWebRequest.GetRequestStreamAsync();
+                using (var stream = new StreamWriter(asyncResult.Result))
                 {
                     stream.Write(serializedPayload);
                 }
@@ -411,7 +424,10 @@ namespace bleak.Api.Rest
             if (formPameters != null && formPameters.Count() > 0)
             {
                 var formData = GetFormData(ref summary, formPameters.ToArray());
-                using (var stream = httpWebRequest.GetRequestStream())
+
+                // TODO: Really make this an Async behavior
+                var asyncResult = httpWebRequest.GetRequestStreamAsync();
+                using (var stream = asyncResult.Result)
                 {
                     stream.Write(formData, 0, formData.Length);
                 }
@@ -435,7 +451,8 @@ namespace bleak.Api.Rest
                 var authHeader = new Header()
                 {
                     Name = "Authorization",
-                    Value = "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(username + ":" + password))
+                    // TODO: Encoding.Unicode was Encoding.Default. Does this matter?
+                    Value = "Basic " + Convert.ToBase64String(Encoding.Unicode.GetBytes(username + ":" + password))
                 };
                 if (headers == null)
                 {
@@ -452,7 +469,9 @@ namespace bleak.Api.Rest
             }
             if (!string.IsNullOrEmpty(userAgent))
             {
-                httpWebRequest.UserAgent = userAgent;
+                // TODO: Test with .NET Standard 1.3
+                //httpWebRequest.UserAgent = userAgent;
+                httpWebRequest.Headers["User-Agent"] = userAgent;
             }
             if (!string.IsNullOrEmpty(accept))
             {
@@ -531,7 +550,7 @@ namespace bleak.Api.Rest
                 sb.Append(parm.Value);
             }
             summary.SerializedRequest = sb.ToString();
-            var formData = Encoding.ASCII.GetBytes(sb.ToString());
+            var formData = Encoding.Unicode.GetBytes(sb.ToString());
             return formData;
         }
     }
