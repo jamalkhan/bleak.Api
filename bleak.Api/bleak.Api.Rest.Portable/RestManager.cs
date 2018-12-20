@@ -1,15 +1,15 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace bleak.Api.Rest
+
+namespace bleak.Api.Rest.Portable
 {
+
     public static class RestManager
     {
         /// <summary>
@@ -469,33 +469,7 @@ namespace bleak.Api.Rest
             }
             if (!string.IsNullOrEmpty(userAgent))
             {
-                try
-                {
-#if NETCOREAPP1_0 || NETCOREAPP1_1 || NETCOREAPP2_0 || NETCOREAPP2_1
-                    httpWebRequest.UserAgent = userAgent;
-#else
-                    httpWebRequest.Headers["User-Agent"] = userAgent;
-#endif
-                }
-                catch
-                {
-                    httpWebRequest.Headers["User-Agent"] = userAgent;
-                }
-                // TODO: Test with .NET Standard 1.3
-#if NET20 || NET35 || NET40 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
-                httpWebRequest.UserAgent = userAgent;
-#elif NETSTANDARD1_3 || NETSTANDARD1_2
-                //httpWebRequest.Headers["User-Agent"] = userAgent;
-                httpWebRequest.UserAgent = userAgent;
-#elif NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#elif NETCOREAPP1_0 || NETCOREAPP1_1 || NETCOREAPP2_0 || NETCOREAPP2_1
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#elif NETSTANDARD1_1 || NETSTANDARD1_0
-                // Do Nothing because ???
-#else
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#endif
+                //httpWebRequest = userAgent;
             }
             if (!string.IsNullOrEmpty(accept))
             {
@@ -505,15 +479,7 @@ namespace bleak.Api.Rest
             {
                 foreach (var header in headers)
                 {
-                    try
-                    {
-                        httpWebRequest.Headers[header.Name] = header.Value;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-
+                    httpWebRequest.Headers[header.Name] = header.Value;
                 }
             }
         }
