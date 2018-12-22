@@ -1,14 +1,14 @@
-﻿using System;
-using bleak.Api.Rest.Portable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using bleak.Api.Rest;
+using System;
 
-namespace bleak.Api.Rest.NetFrameworkTests
+namespace bleak.Api.Rest.Tests
 {
     [TestClass]
-    public class RestManagerTests
+    public class NetCoreRestHelperTests
     {
         [TestMethod]
-        public void TestGet()
+        public void UserAgentTest()
         {
             var s = "https://google.com";
             var results = RestManager.ExecuteRestMethod<string, string>(uri: new Uri(s), verb: HttpVerbs.GET, userAgent: "blah blah blah");

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace bleak.Api.Rest.Xamarin.Android.Tests
 {
     [TestFixture]
-    public class TestsSample
+    public class XamarinRestManagerTests
     {
 
         [SetUp]
@@ -16,7 +16,7 @@ namespace bleak.Api.Rest.Xamarin.Android.Tests
         public void Tear() { }
 
         [Test]
-        public void LoadGoogleTest()
+        public void UserAgentTest()
         {
             var s = "https://google.com";
             var results = RestManager.ExecuteRestMethod<string, string>(uri: new Uri(s), verb: HttpVerbs.GET, userAgent: "blah blah blah");

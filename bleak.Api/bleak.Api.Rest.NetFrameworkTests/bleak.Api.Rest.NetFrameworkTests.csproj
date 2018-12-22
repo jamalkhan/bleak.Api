@@ -48,16 +48,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="NetFrameworkRestManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj">
-      <Project>{72ccfe63-be65-46de-9bdc-a264a6fcbd88}</Project>
-      <Name>bleak.Api.Rest.Portable</Name>
+    <ProjectReference Include="..\bleak.Api.Rest\bleak.Api.Rest.csproj">
+      <Project>{0d09cc57-7f95-423f-b882-44a0fad86213}</Project>
+      <Name>bleak.Api.Rest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
