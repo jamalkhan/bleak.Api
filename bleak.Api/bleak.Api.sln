@@ -10,6 +10,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Tests", "ble
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Xamarin.Android.Tests", "bleak.Api.Rest.Xamarin.Android.Tests\bleak.Api.Rest.Xamarin.Android.Tests.csproj", "{E846AE2D-D375-40E8-91BC-8D4AB2164866}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Core", "bleak.Api.Rest.Core\bleak.Api.Rest.Core.csproj", "{641F972D-C435-4850-9C18-816EECB8AFFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Xamarin.Android", "bleak.Api.Rest.Xamarin.Android\bleak.Api.Rest.Xamarin.Android.csproj", "{496E5C39-71B5-4E38-80D8-5C6FF1F10555}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common", "bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj", "{754E050B-D43C-4EBD-845F-F51CFC0155BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Xamarin.iOS", "bleak.Api.Rest.Xamarin.iOS\bleak.Api.Rest.Xamarin.iOS.csproj", "{E71F3053-056C-4381-9638-048ED73BDFF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{941E5BFC-639E-4BEC-B65E-66434CE97E02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Core.Tests", "bleak.Api.Rest.Core.Tests\bleak.Api.Rest.Core.Tests.csproj", "{7F92427A-5B9A-4A69-9908-90D172EC1F37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Json", "bleak.Api.Json\bleak.Api.Json.csproj", "{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +46,38 @@ Global
 		{E846AE2D-D375-40E8-91BC-8D4AB2164866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E846AE2D-D375-40E8-91BC-8D4AB2164866}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E846AE2D-D375-40E8-91BC-8D4AB2164866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{641F972D-C435-4850-9C18-816EECB8AFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{641F972D-C435-4850-9C18-816EECB8AFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{641F972D-C435-4850-9C18-816EECB8AFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{641F972D-C435-4850-9C18-816EECB8AFFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{496E5C39-71B5-4E38-80D8-5C6FF1F10555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{496E5C39-71B5-4E38-80D8-5C6FF1F10555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{496E5C39-71B5-4E38-80D8-5C6FF1F10555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{496E5C39-71B5-4E38-80D8-5C6FF1F10555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E71F3053-056C-4381-9638-048ED73BDFF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E71F3053-056C-4381-9638-048ED73BDFF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E71F3053-056C-4381-9638-048ED73BDFF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E71F3053-056C-4381-9638-048ED73BDFF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0D09CC57-7F95-423F-B882-44A0FAD86213} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
+		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
+		{6282D6D1-3250-4BC9-8B07-B0654CA45A56} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42D711FF-D4B7-4FE5-950C-43EBBCA70254}

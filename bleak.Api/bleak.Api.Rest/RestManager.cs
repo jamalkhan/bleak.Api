@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
 {
+    [Obsolete("This has been replaced by the non-static RestManagers in bleak.Api.Rest.Core and bleak.Api.Rest.Xamarin")]
     public static class RestManager
     {
         /// <summary>
