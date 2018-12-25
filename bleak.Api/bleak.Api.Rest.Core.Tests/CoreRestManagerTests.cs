@@ -11,9 +11,10 @@ namespace bleak.Api.Rest.Core.Tests
         [TestMethod]
         public void TestLoadWebpage()
         {
+            var serializer = new JsonSerializer();
             IRestManager restManager = new CoreRestManager(
-                serializer: new JsonSerializer(), 
-                deserializer: new JsonDeserializer());
+                serializer: serializer, 
+                deserializer: serializer);
             var results = restManager.ExecuteRestMethod<string, string>(new Uri("http://google.com"));
             Assert.IsTrue(results.Results.Contains("<body"));
         }

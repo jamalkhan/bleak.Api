@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using bleak.Api.Rest.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,14 +10,15 @@ using System.Text;
 
 namespace bleak.Api.Rest.Portable
 {
-
+    [Obsolete("Please switch to using the PortableRestManager instead")]
     public static class RestManager
     {
         /// <summary>
         /// The accepted HTTP methods.
         /// </summary>
-        readonly static string[] acceptedMethods = { "GET", "POST", "PUT", "DELETE" };
+        private static readonly string[] acceptedMethods = { "GET", "POST", "PUT", "DELETE" };
 
+        private static PortableJsonSerializer _serializer = new PortableJsonSerializer();
 
         /// <summary>
         /// Executes the rest method.
@@ -56,13 +58,19 @@ namespace bleak.Api.Rest.Portable
             string method = verb.ToString();
 
             if (!acceptedMethods.Contains(method))
+            {
                 throw new ArgumentException(method + " is not currently supported.", method);
+            }
 
             if (payload != null && !string.IsNullOrEmpty(serializedPayload) && parameters != null)
+            {
                 throw new ArgumentOutOfRangeException("payload, serializedPayload, and pameters are mutually exclusive.");
+            }
 
             if (string.IsNullOrEmpty(url))
+            {
                 throw new ArgumentNullException("url");
+            }
 
             var summary = new RequestResponseSummary<TSuccess, TError>();
             try
@@ -247,7 +255,9 @@ namespace bleak.Api.Rest.Portable
                 // Thanks to feedback from commenters, add a CRLF to allow multiple parameters to be added.
                 // Skip it on the first parameter, add it to subsequent parameters.
                 if (needsClrf)
+                {
                     formDataStream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+                }
 
                 needsClrf = true;
 
@@ -405,7 +415,7 @@ namespace bleak.Api.Rest.Portable
         {
             if (payload != null)
             {
-                serializedPayload = payload.Serialize();
+                serializedPayload = _serializer.Serialize(payload);
             }
             if (!string.IsNullOrEmpty(serializedPayload))
             {

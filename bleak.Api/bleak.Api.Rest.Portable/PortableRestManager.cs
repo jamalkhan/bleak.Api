@@ -1,29 +1,64 @@
 ﻿using bleak.Api.Rest.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace bleak.Api.Rest.Xamarin.Android
+namespace bleak.Api.Rest.Portable
 {
-    public class Class1
+    public class PortableJsonSerializer : IDeserializer, ISerializer
     {
+        JsonSerializerSettings _settings = new JsonSerializerSettings()
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        };
+
+        /// <summary>
+        /// Serializes an Object
+        /// </summary>
+        /// <param name="obj">The Object to be serialized</param>
+        /// <returns>A JSON string of the Object</returns>
+        public string Serialize(object obj)
+        {
+            string serializedObj = JsonConvert.SerializeObject(obj,
+                Formatting.None,
+                _settings);
+            return serializedObj;
+        }
+
+        /// <summary>
+        /// Deserializes a JSON string
+        /// </summary>
+        /// <typeparam name="T">The Type to cast the JSON String to.</typeparam>
+        /// <param name="json">The JSON string to Deserialize</param>
+        /// <returns>An Instantiated Object from the JSON</returns>
+        public T Deserialize<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json);
+        }
     }
 
-    public class AndroidRestManager : IRestManager
+    public class PortableRestManager : IRestManager
     {
         private ISerializer _serializer;
         private IDeserializer _deserializer;
         private string _userAgent;
-        public CoreRestManager(ISerializer serializer, IDeserializer deserializer)
+        public PortableRestManager(ISerializer serializer, IDeserializer deserializer, string userAgent)
         {
             _serializer = serializer;
             _deserializer = deserializer;
-            _userAgent = $"{new StackTrace().GetFrame(1).GetMethod().DeclaringType.Assembly.GetName().Name} API Connector/{GetType().Assembly.GetName().Version} ({Environment.OSVersion.ToString()})";
+            _userAgent = userAgent;
         }
+
+        /*
+        public PortableRestManager(ISerializer serializer, IDeserializer deserializer)
+            : this(serializer, deserializer, $"{new StackTrace().GetFrame(1).GetMethod().DeclaringType.Assembly.GetName().Name} API Connector/{GetType().Assembly.GetName().Version} ({Environment.OSVersion.ToString()})")
+        {
+        }
+        */
 
         public RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
         (
@@ -36,7 +71,7 @@ namespace bleak.Api.Rest.Xamarin.Android
             string username = null,
             string password = null,
             string accept = null,
-            string contentType = "application/json"
+            string contentType = null
         )
         {
             string url = uri.ToString();
@@ -157,12 +192,7 @@ namespace bleak.Api.Rest.Xamarin.Android
             //{
             //    httpWebRequest.CookieContainer = cookieContainer;
             //}
-            try
-            {
-                httpWebRequest.UserAgent = _userAgent;
-            }
-            catch
-            {
+            
                 try
                 {
                     httpWebRequest.Headers["User-Agent"] = _userAgent;
@@ -170,7 +200,6 @@ namespace bleak.Api.Rest.Xamarin.Android
                 catch
                 {
                 }
-            }
 
             if (!string.IsNullOrEmpty(accept))
             {
