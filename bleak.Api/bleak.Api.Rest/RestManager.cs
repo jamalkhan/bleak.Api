@@ -1,24 +1,17 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace bleak.Api.Rest
 {
-    [Obsolete("This has been replaced by the non-static RestManagers in bleak.Api.Rest.Core and bleak.Api.Rest.Xamarin")]
+    [Obsolete("This has been replaced by the non-static RestManagers in bleak.Api.Rest.Core and bleak.Api.Rest.Portable")]
     public static class RestManager
     {
-        /// <summary>
-        /// The accepted HTTP methods.
-        /// </summary>
-        readonly static string[] acceptedMethods = { "GET", "POST", "PUT", "DELETE" };
-
-
         /// <summary>
         /// Executes the rest method.
         /// </summary>
@@ -56,14 +49,15 @@ namespace bleak.Api.Rest
             string url = uri.ToString();
             string method = verb.ToString();
 
-            if (!acceptedMethods.Contains(method))
-                throw new ArgumentException(method + " is not currently supported.", method);
-
             if (payload != null && !string.IsNullOrEmpty(serializedPayload) && parameters != null)
+            {
                 throw new ArgumentOutOfRangeException("payload, serializedPayload, and pameters are mutually exclusive.");
+            }
 
             if (string.IsNullOrEmpty(url))
+            {
                 throw new ArgumentNullException("url");
+            }
 
             var summary = new RequestResponseSummary<TSuccess, TError>();
             try
@@ -248,7 +242,9 @@ namespace bleak.Api.Rest
                 // Thanks to feedback from commenters, add a CRLF to allow multiple parameters to be added.
                 // Skip it on the first parameter, add it to subsequent parameters.
                 if (needsClrf)
+                {
                     formDataStream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+                }
 
                 needsClrf = true;
 
@@ -472,31 +468,20 @@ namespace bleak.Api.Rest
             {
                 try
                 {
-#if NETCOREAPP1_0 || NETCOREAPP1_1 || NETCOREAPP2_0 || NETCOREAPP2_1
-                    httpWebRequest.UserAgent = userAgent;
-#else
-                    httpWebRequest.Headers["User-Agent"] = userAgent;
-#endif
+                    httpWebRequest.GetType()
+                        .GetRuntimeProperty("UserAgent")
+                        .SetValue(httpWebRequest, userAgent, null);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    httpWebRequest.Headers["User-Agent"] = userAgent;
+                    try
+                    {
+                        httpWebRequest.Headers["User-Agent"] = userAgent;
+                    }
+                    catch
+                    {
+                    }
                 }
-                // TODO: Test with .NET Standard 1.3
-#if NET20 || NET35 || NET40 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472
-                httpWebRequest.UserAgent = userAgent;
-#elif NETSTANDARD1_3 || NETSTANDARD1_2
-                //httpWebRequest.Headers["User-Agent"] = userAgent;
-                httpWebRequest.UserAgent = userAgent;
-#elif NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#elif NETCOREAPP1_0 || NETCOREAPP1_1 || NETCOREAPP2_0 || NETCOREAPP2_1
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#elif NETSTANDARD1_1 || NETSTANDARD1_0
-                // Do Nothing because ???
-#else
-                httpWebRequest.Headers["User-Agent"] = userAgent;
-#endif
             }
             if (!string.IsNullOrEmpty(accept))
             {

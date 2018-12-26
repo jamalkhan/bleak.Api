@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="XamarinRestManagerTests.cs" />
+    <Compile Include="PortableRestManagerTests.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,9 +68,13 @@
     <AndroidAsset Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bleak.Api.Rest\bleak.Api.Rest.csproj">
-      <Project>{0D09CC57-7F95-423F-B882-44A0FAD86213}</Project>
-      <Name>bleak.Api.Rest</Name>
+    <ProjectReference Include="..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj">
+      <Project>{754e050b-d43c-4ebd-845f-f51cfc0155bf}</Project>
+      <Name>bleak.Api.Rest.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj">
+      <Project>{72ccfe63-be65-46de-9bdc-a264a6fcbd88}</Project>
+      <Name>bleak.Api.Rest.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

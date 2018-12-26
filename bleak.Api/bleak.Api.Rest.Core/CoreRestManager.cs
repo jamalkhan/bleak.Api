@@ -9,11 +9,9 @@ using System.Text;
 
 namespace bleak.Api.Rest.Core
 {
-    public class CoreRestManager : IRestManager
+    public class CoreRestManager : BaseRestManager, IRestManager
     {
-        private ISerializer _serializer;
-        private IDeserializer _deserializer;
-        private string _userAgent;
+        
         public CoreRestManager(ISerializer serializer, IDeserializer deserializer)
         {
             _serializer = serializer;
@@ -103,7 +101,7 @@ namespace bleak.Api.Rest.Core
         /// <param name="summary"></param>
         /// <param name="httpWebRequest"></param>
         /// <returns></returns>
-        private void SubmitResponseUsing<TSuccess, TError>(
+        protected void SubmitResponseUsing<TSuccess, TError>(
             ref RequestResponseSummary<TSuccess, TError> summary,
             HttpWebRequest httpWebRequest
             )
