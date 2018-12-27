@@ -35,13 +35,6 @@ steps:
     dotnet pack bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
 
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: external
-    publishFeedCredentials: 'NuGetConnnection'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -49,3 +42,10 @@ steps:
     testResultsFiles: '**/*.trx'
 
 - task: PublishBuildArtifacts@1
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'NuGetConnection'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
