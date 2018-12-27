@@ -8,7 +8,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   Major: '0'
-  Minor: '10'
+  Minor: '0'
   Patch: '0'
 
 
@@ -30,9 +30,6 @@ steps:
     dotnet test bleak.Api.Json.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
-	nuget pack bleak.Api.Rest.Common/bleak.Api.Rest.Common.nuspec
-	nuget pack bleak.Api.Json/bleak.Api.Json.nuspec
-	nuget pack bleak.Api.Rest.Core/bleak.Api.Rest.Core.nuspec
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
 - task: PublishTestResults@2
   condition: succeededOrFailed()
