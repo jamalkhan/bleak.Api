@@ -20,15 +20,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Json", "bleak.Api
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable", "bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj", "{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Common.Core.Tests", "bleak.Api.Rest.Common.Core.Tests\bleak.Api.Rest.Common.Core.Tests.csproj", "{765F02AA-9850-46E4-A07C-2B9E030F0EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common.Core.Tests", "bleak.Api.Rest.Common.Core.Tests\bleak.Api.Rest.Common.Core.Tests.csproj", "{765F02AA-9850-46E4-A07C-2B9E030F0EEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Common.NetFramework.Tests", "bleak.Api.Rest.Common.NetFramework.Tests\bleak.Api.Rest.Common.NetFramework.Tests.csproj", "{88804D5C-12FB-4ADA-9C02-778C5E229375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Json.Tests", "bleak.Api.Json.Tests\bleak.Api.Json.Tests.csproj", "{2EE8D6DB-7091-4368-98EC-83C311623C9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Json.Tests", "bleak.Api.Json.Tests\bleak.Api.Json.Tests.csproj", "{2EE8D6DB-7091-4368-98EC-83C311623C9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12DA68D0-95BC-4130-A706-CC6731A07B61}"
 	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
+		azure-pipelines.yaml = azure-pipelines.yaml
 	EndProjectSection
 EndProject
 Global
