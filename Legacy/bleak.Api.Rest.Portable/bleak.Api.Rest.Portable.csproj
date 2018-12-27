@@ -47,7 +47,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj">
+    <ProjectReference Include="..\..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj">
       <Project>{754e050b-d43c-4ebd-845f-f51cfc0155bf}</Project>
       <Name>bleak.Api.Rest.Common</Name>
     </ProjectReference>

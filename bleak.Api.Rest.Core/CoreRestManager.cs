@@ -70,11 +70,6 @@ namespace bleak.Api.Rest.Core
                 SubmitResponseUsing<TSuccess, TError>(ref summary, httpWebRequest);
 
                 return summary;
-
-
-
-
-
             }
             catch (WebException ex)
             {
