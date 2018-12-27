@@ -30,46 +30,14 @@ steps:
     dotnet test bleak.Api.Json.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
+    dotnet pack bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+    dotnet pack bleak.Api.Json/bleak.Api.Json.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+    dotnet pack bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    packagesToPack: 'bleak.Api.Rest.Common/bleak.Api.Rest.Common.nuspec'
-    versioningScheme: byBuildNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    packagesToPack: 'bleak.Api.Json/bleak.Api.Json.nuspec'
-    versioningScheme: byBuildNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    packagesToPack: 'bleak.Api.Rest.Core/bleak.Api.Rest.Core.nuspec'
-    versioningScheme: byBuildNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
-
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: external
-    publishFeedCredentials: '<Name of the NuGet service connection>'
-    versioningScheme: byEnvVar
-    versionEnvVar: Version
 
 - task: PublishBuildArtifacts@1
