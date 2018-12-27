@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Logo.logoist = Logo.logoist
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable.Tests", "bleak.Api.Rest.Portable.Tests\bleak.Api.Rest.Portable.Tests.csproj", "{2983CE49-D465-4956-ADF2-4040CF597637}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2983CE49-D465-4956-ADF2-4040CF597637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2983CE49-D465-4956-ADF2-4040CF597637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2983CE49-D465-4956-ADF2-4040CF597637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2983CE49-D465-4956-ADF2-4040CF597637}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
