@@ -10,6 +10,7 @@ variables:
 
 steps:
 - script: |
+    dotnet restore
     dotnet build --configuration $(buildConfiguration)
     dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
