@@ -2,13 +2,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core?view=vsts
 
 pool:
-  vmImage: 'vs2017-win2016'
-#  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Ubuntu 16.04'
+#  vmImage: 'vs2017-win2016'
   
 variables:
   buildConfiguration: 'Release'
   Major: '0'
-  Minor: '0'
+  Minor: '10'
   Patch: '0'
 
 
@@ -34,6 +34,14 @@ steps:
     dotnet pack bleak.Api.Json/bleak.Api.Json.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet pack bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'NuGetConnnection'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
