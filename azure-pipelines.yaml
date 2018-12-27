@@ -10,6 +10,7 @@ variables:
 
 steps:
 - script: |
+    curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
     dotnet restore bleak.Api.Rest/bleak.Api.Rest.csproj
     dotnet restore bleak.Api.Rest.NetFrameworkTests/bleak.Api.Rest.NetFrameworkTests.csproj
     dotnet restore bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj
