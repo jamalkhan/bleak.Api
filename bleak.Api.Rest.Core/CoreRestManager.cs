@@ -11,7 +11,6 @@ namespace bleak.Api.Rest.Core
 {
     public class CoreRestManager : BaseRestManager, IRestManager
     {
-        
         public CoreRestManager(ISerializer serializer, IDeserializer deserializer)
         {
             _serializer = serializer;
