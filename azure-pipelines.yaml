@@ -8,26 +8,24 @@ pool:
 variables:
   buildConfiguration: 'Release'
   Major: '0'
-  Minor: '11'
+  Minor: '12'
   Patch: '0'
 
 
 steps:
 - script: |
-    curl -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-    dotnet restore bleak.Api.Json/bleak.Api.Json.csproj
-    dotnet restore bleak.Api.Json.Tests/bleak.Api.Json.Tests.csproj
     dotnet restore bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj
-    dotnet restore bleak.Api.Rest.Common.Core.Tests/bleak.Api.Rest.Common.Core.Tests.csproj
-    dotnet restore bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj
-    dotnet restore bleak.Api.Rest.Core.Tests/bleak.Api.Rest.Core.Tests.csproj
-    dotnet build ./bleak.Api.OnlyCore.sln --configuration $(buildConfiguration)
-    dotnet test bleak.Api.Json.Tests --configuration $(buildConfiguration) --logger trx
-    dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
-    dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
+    dotnet restore bleak.Api.Rest.Common.Tests/bleak.Api.Rest.Common.Tests.csproj
+    dotnet restore bleak.Api.Rest/bleak.Api.Rest.csproj
+    dotnet restore bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj
+    dotnet build bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj --configuration $(buildConfiguration)
+    dotnet build bleak.Api.Rest.Common.Tests/bleak.Api.Rest.Common.Tests.csproj --configuration $(buildConfiguration)
+    dotnet build bleak.Api.Rest/bleak.Api.Rest.csproj --configuration $(buildConfiguration)
+    dotnet build bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj --configuration $(buildConfiguration)
+    dotnet test bleak.Api.Rest.Common.Tests --configuration $(buildConfiguration) --logger trx
+    dotnet test bleak.Api.Rest.Tests --configuration $(buildConfiguration) --logger trx
     dotnet pack bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
-    dotnet pack bleak.Api.Json/bleak.Api.Json.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
-    dotnet pack bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+    dotnet pack bleak.Api.Rest/bleak.Api.Rest.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
 
 - task: PublishTestResults@2

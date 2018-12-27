@@ -22,7 +22,7 @@ namespace bleak.Api.Rest.Common
             _userAgent = userAgent;
         }
 
-        private byte[] GetFormData<TSuccess, TError>(
+        protected virtual byte[] GetFormData<TSuccess, TError>(
             ref RequestResponseSummary<TSuccess, TError> summary,
             params FormParameter[] parms)
         {

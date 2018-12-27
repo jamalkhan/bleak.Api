@@ -2,29 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest", "bleak.Api.Rest\bleak.Api.Rest.csproj", "{0D09CC57-7F95-423F-B882-44A0FAD86213}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest", "..\bleak.Api.Rest\bleak.Api.Rest.csproj", "{0D09CC57-7F95-423F-B882-44A0FAD86213}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.NetFrameworkTests", "bleak.Api.Rest.NetFrameworkTests\bleak.Api.Rest.NetFrameworkTests.csproj", "{44B0A34E-A71C-45E6-A1C2-6966787FF9C2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Tests", "bleak.Api.Rest.Tests\bleak.Api.Rest.Tests.csproj", "{6282D6D1-3250-4BC9-8B07-B0654CA45A56}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Core", "..\bleak.Api.Rest.Core\bleak.Api.Rest.Core.csproj", "{641F972D-C435-4850-9C18-816EECB8AFFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Tests", "..\bleak.Api.Rest.Tests\bleak.Api.Rest.Tests.csproj", "{6282D6D1-3250-4BC9-8B07-B0654CA45A56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common", "..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj", "{754E050B-D43C-4EBD-845F-F51CFC0155BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{941E5BFC-639E-4BEC-B65E-66434CE97E02}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Core.Tests", "..\bleak.Api.Rest.Core.Tests\bleak.Api.Rest.Core.Tests.csproj", "{7F92427A-5B9A-4A69-9908-90D172EC1F37}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Json", "..\bleak.Api.Json\bleak.Api.Json.csproj", "{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable", "bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj", "{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common.Core.Tests", "..\bleak.Api.Rest.Common.Core.Tests\bleak.Api.Rest.Common.Core.Tests.csproj", "{765F02AA-9850-46E4-A07C-2B9E030F0EEC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Common.NetFramework.Tests", "bleak.Api.Rest.Common.NetFramework.Tests\bleak.Api.Rest.Common.NetFramework.Tests.csproj", "{88804D5C-12FB-4ADA-9C02-778C5E229375}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Json.Tests", "..\bleak.Api.Json.Tests\bleak.Api.Json.Tests.csproj", "{2EE8D6DB-7091-4368-98EC-83C311623C9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable", "..\bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj", "{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12DA68D0-95BC-4130-A706-CC6731A07B61}"
 	ProjectSection(SolutionItems) = preProject
@@ -41,54 +25,21 @@ Global
 		{0D09CC57-7F95-423F-B882-44A0FAD86213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D09CC57-7F95-423F-B882-44A0FAD86213}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D09CC57-7F95-423F-B882-44A0FAD86213}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6282D6D1-3250-4BC9-8B07-B0654CA45A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6282D6D1-3250-4BC9-8B07-B0654CA45A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6282D6D1-3250-4BC9-8B07-B0654CA45A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6282D6D1-3250-4BC9-8B07-B0654CA45A56}.Release|Any CPU.Build.0 = Release|Any CPU
-		{641F972D-C435-4850-9C18-816EECB8AFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{641F972D-C435-4850-9C18-816EECB8AFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{641F972D-C435-4850-9C18-816EECB8AFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{641F972D-C435-4850-9C18-816EECB8AFFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{754E050B-D43C-4EBD-845F-F51CFC0155BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F92427A-5B9A-4A69-9908-90D172EC1F37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{765F02AA-9850-46E4-A07C-2B9E030F0EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{765F02AA-9850-46E4-A07C-2B9E030F0EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{765F02AA-9850-46E4-A07C-2B9E030F0EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{765F02AA-9850-46E4-A07C-2B9E030F0EEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88804D5C-12FB-4ADA-9C02-778C5E229375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88804D5C-12FB-4ADA-9C02-778C5E229375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88804D5C-12FB-4ADA-9C02-778C5E229375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88804D5C-12FB-4ADA-9C02-778C5E229375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EE8D6DB-7091-4368-98EC-83C311623C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EE8D6DB-7091-4368-98EC-83C311623C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EE8D6DB-7091-4368-98EC-83C311623C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EE8D6DB-7091-4368-98EC-83C311623C9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0D09CC57-7F95-423F-B882-44A0FAD86213} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
-		{44B0A34E-A71C-45E6-A1C2-6966787FF9C2} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
-		{6282D6D1-3250-4BC9-8B07-B0654CA45A56} = {941E5BFC-639E-4BEC-B65E-66434CE97E02}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42D711FF-D4B7-4FE5-950C-43EBBCA70254}
