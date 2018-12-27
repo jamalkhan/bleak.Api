@@ -11,16 +11,16 @@ variables:
 steps:
 - script: |
     dotnet restore bleak.Api.Rest/bleak.Api.Rest.csproj
-	dotnet restore bleak.Api.Rest.NetFrameworkTests/bleak.Api.Rest.NetFrameworkTests.csproj
-	dotnet restore bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj
-	dotnet restore bleak.Api.Json/bleak.Api.Json.csproj
-	dotnet restore bleak.Api.Json.Tests/bleak.Api.Json.Tests.csproj
-	dotnet restore bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj
-	dotnet restore bleak.Api.Rest.Common.Core.Tests/bleak.Api.Rest.Common.Core.Tests.csproj
-	dotnet restore bleak.Api.Rest.Common.NetFramework.Tests/bleak.Api.Rest.Common.NetFramework.Tests.csproj
-	dotnet restore bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj
-	dotnet restore bleak.Api.Rest.Core.Tests/bleak.Api.Rest.Core.Tests.csproj
-	dotnet restore bleak.Api.Rest.Portable/bleak.Api.Rest.Portable.csproj
+    dotnet restore bleak.Api.Rest.NetFrameworkTests/bleak.Api.Rest.NetFrameworkTests.csproj
+    dotnet restore bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj
+    dotnet restore bleak.Api.Json/bleak.Api.Json.csproj
+    dotnet restore bleak.Api.Json.Tests/bleak.Api.Json.Tests.csproj
+    dotnet restore bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj
+    dotnet restore bleak.Api.Rest.Common.Core.Tests/bleak.Api.Rest.Common.Core.Tests.csproj
+    dotnet restore bleak.Api.Rest.Common.NetFramework.Tests/bleak.Api.Rest.Common.NetFramework.Tests.csproj
+    dotnet restore bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj
+    dotnet restore bleak.Api.Rest.Core.Tests/bleak.Api.Rest.Core.Tests.csproj
+    dotnet restore bleak.Api.Rest.Portable/bleak.Api.Rest.Portable.csproj
     dotnet build --configuration $(buildConfiguration)
     dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
