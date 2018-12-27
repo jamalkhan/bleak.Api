@@ -22,8 +22,8 @@ steps:
     dotnet restore bleak.Api.Rest.Core/bleak.Api.Rest.Core.csproj
     dotnet restore bleak.Api.Rest.Core.Tests/bleak.Api.Rest.Core.Tests.csproj
     dotnet restore bleak.Api.Rest.Portable/bleak.Api.Rest.Portable.csproj
-    nuget.exe restore bleak.Api.Rest.Portable/bleak.Api.Rest.Portable.csproj -PackagesDirectory packages
-    dotnet build --configuration $(buildConfiguration)
+    dotnet build \.\bleak.Api.OnlyCore.sln' --configuration $(buildConfiguration)
+	dotnet test bleak.Api.Json.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Common.Core.Tests --configuration $(buildConfiguration) --logger trx
     dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
