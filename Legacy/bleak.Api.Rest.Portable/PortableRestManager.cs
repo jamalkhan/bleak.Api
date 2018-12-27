@@ -12,7 +12,7 @@ namespace bleak.Api.Rest.Portable
         : BaseRestManager
         , IRestManager
     {
-        public PortableRestManager(ISerializer serializer, IDeserializer deserializer, string userAgent)
+        public PortableRestManager(ISerializer serializer, IDeserializer deserializer, string userAgent) : base()
         {
             _serializer = serializer;
             _deserializer = deserializer;
@@ -70,7 +70,6 @@ namespace bleak.Api.Rest.Portable
                    password: password,
                    accept: accept,
                    contentType: contentType
-                   //cookieContainer: cookieContainer
                    );
 
                 BuildPayload(payload, serializedPayload, parameters, httpWebRequest, ref summary);
@@ -134,7 +133,6 @@ namespace bleak.Api.Rest.Portable
             string password,
             string accept,
             string contentType
-            //CookieContainer cookieContainer
             )
         {
             if (!string.IsNullOrEmpty(username))
@@ -158,14 +156,14 @@ namespace bleak.Api.Rest.Portable
             //{
             //    httpWebRequest.CookieContainer = cookieContainer;
             //}
-            
-                try
-                {
-                    httpWebRequest.Headers["User-Agent"] = _userAgent;
-                }
-                catch
-                {
-                }
+
+            try
+            {
+                httpWebRequest.Headers["User-Agent"] = _userAgent;
+            }
+            catch
+            {
+            }
 
             if (!string.IsNullOrEmpty(accept))
             {
@@ -316,6 +314,7 @@ namespace bleak.Api.Rest.Portable
             }
         }
 
+        // TODO: Remove this
         private byte[] GetFormData<TSuccess, TError>(
             ref RequestResponseSummary<TSuccess, TError> summary,
             params FormParameter[] parms)

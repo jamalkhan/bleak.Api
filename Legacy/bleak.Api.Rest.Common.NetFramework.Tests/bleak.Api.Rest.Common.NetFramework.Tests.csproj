@@ -60,15 +60,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bleak.Api.Json\bleak.Api.Json.csproj">
+    <ProjectReference Include="..\..\bleak.Api.Json\bleak.Api.Json.csproj">
       <Project>{D2C0E074-229E-41EE-AEC4-C81EC4C5F485}</Project>
       <Name>bleak.Api.Json</Name>
     </ProjectReference>
-    <ProjectReference Include="..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj">
+    <ProjectReference Include="..\..\bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj">
       <Project>{754E050B-D43C-4EBD-845F-F51CFC0155BF}</Project>
       <Name>bleak.Api.Rest.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\bleak.Api.Rest.Core\bleak.Api.Rest.Core.csproj">
+    <ProjectReference Include="..\..\bleak.Api.Rest.Core\bleak.Api.Rest.Core.csproj">
       <Project>{641F972D-C435-4850-9C18-816EECB8AFFF}</Project>
       <Name>bleak.Api.Rest.Core</Name>
     </ProjectReference>

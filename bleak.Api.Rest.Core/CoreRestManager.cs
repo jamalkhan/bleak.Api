@@ -309,7 +309,8 @@ namespace bleak.Api.Rest.Core
             }
         }
 
-        private byte[] GetFormData<TSuccess, TError>(
+        // TODO: Remove this
+        protected byte[] GetFormData<TSuccess, TError>(
             ref RequestResponseSummary<TSuccess, TError> summary,
             params FormParameter[] parms)
         {
