@@ -48,6 +48,10 @@
     <Compile Include="RestManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bleak.Api.Rest.Portable.nuspec" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
