@@ -18,14 +18,28 @@ steps:
     dotnet restore bleak.Api.Rest.Common.Tests/bleak.Api.Rest.Common.Tests.csproj
     dotnet restore bleak.Api.Rest/bleak.Api.Rest.csproj
     dotnet restore bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj
+  displayName: Restore
+  name: Restore
+
+- script: |
     dotnet build bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj --configuration $(buildConfiguration)
     dotnet build bleak.Api.Rest.Common.Tests/bleak.Api.Rest.Common.Tests.csproj --configuration $(buildConfiguration)
     dotnet build bleak.Api.Rest/bleak.Api.Rest.csproj --configuration $(buildConfiguration)
     dotnet build bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj --configuration $(buildConfiguration)
+  displayName: Build
+  name: Build
+
+- script: |
     dotnet test bleak.Api.Rest.Common.Tests --configuration $(buildConfiguration) --logger trx
     dotnet test bleak.Api.Rest.Tests --configuration $(buildConfiguration) --logger trx
+  displayName: Run Tests
+  name: Run_Tests
+
+- script: |
     dotnet pack bleak.Api.Rest.Common/bleak.Api.Rest.Common.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
     dotnet pack bleak.Api.Rest/bleak.Api.Rest.csproj -c $(buildConfiguration) /p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory) --no-build --no-restore
+  displayName: Pack
+  name: Pack
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
