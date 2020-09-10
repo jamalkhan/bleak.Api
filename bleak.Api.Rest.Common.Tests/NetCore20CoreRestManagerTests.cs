@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using bleak.Api.Rest.Common;
 
 namespace bleak.Api.Rest.Core.Tests
 {
@@ -10,12 +11,12 @@ namespace bleak.Api.Rest.Core.Tests
         public void TestPlaceholder()
         {
             Assert.IsTrue(true);
-        //    var serializer = new JsonSerializer();
-        //    IRestManager restManager = new CoreRestManager(
-        //        serializer: serializer,
-        //        deserializer: serializer);
-        //    var results = restManager.ExecuteRestMethod<string, string>(new Uri("http://google.com"));
-        //    Assert.IsTrue(results.Results.Contains("<body"));
+            var serializer = new JsonSerializer();
+            IRestManager restManager = new CoreRestManager(
+                serializer: serializer,
+                deserializer: serializer);
+            var results = restManager.ExecuteRestMethod<string, string>(new Uri("http://google.com"));
+            Assert.IsTrue(results.Results.Contains("<body"));
         }
     }
 }
