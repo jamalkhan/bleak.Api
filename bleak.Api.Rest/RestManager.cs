@@ -474,7 +474,7 @@ namespace bleak.Api.Rest
                         .GetRuntimeProperty("UserAgent")
                         .SetValue(httpWebRequest, userAgent, null);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     try
                     {

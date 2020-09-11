@@ -243,6 +243,20 @@ namespace bleak.Api.Rest
             {
                 var responseText = streamReader.ReadToEnd();
                 summary.SerializedResponse = responseText;
+
+                if (response.Headers.AllKeys.Any())
+                {
+                    var responseHeaders = new List<Header>();
+                    foreach (var wrh in response.Headers.AllKeys)
+                    {
+                        var header = new Header();
+                        header.Name = wrh;
+                        header.Value = response.Headers[wrh];
+                        responseHeaders.Add(header);
+                    }
+                    summary.ResponseHeaders = responseHeaders;
+                }
+
                 if (string.IsNullOrWhiteSpace(responseText))
                 {
 
@@ -287,7 +301,22 @@ namespace bleak.Api.Rest
                 if (summary != null)
                 {
                     summary.SerializedRequest = serializedPayload;
+
+                    if (httpWebRequest.Headers.AllKeys.Any())
+                    {
+                        var requestHeaders = new List<Header>();
+                        foreach (var whr in httpWebRequest.Headers.AllKeys)
+                        {
+                            var header = new Header();
+                            header.Name = whr;
+                            header.Value = httpWebRequest.Headers[whr];
+                            requestHeaders.Add(header);
+                        }
+                        summary.RequestHeaders = requestHeaders;
+                    }
                 }
+
+
 
                 // TODO: Really make this an Async behavior
                 var asyncResult = httpWebRequest.GetRequestStreamAsync();

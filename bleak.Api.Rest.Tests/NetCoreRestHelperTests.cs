@@ -8,13 +8,14 @@ namespace bleak.Api.Rest.Tests
     [TestClass]
     public class NetLegacyRestHelperTests
     {
+        /*
         [TestMethod]
         public void UserAgentTest()
         {
             var s = "https://google.com";
             var results = RestManager.ExecuteRestMethod<string, string>(uri: new Uri(s), verb: HttpVerbs.GET, userAgent: "blah blah blah");
             Assert.IsTrue(results.Results.Contains("<body"));
-        }
+        }*/
     }
 
     [TestClass]
