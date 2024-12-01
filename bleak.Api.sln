@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Tests", "bleak.Api.Rest.Tests\bleak.Api.Rest.Tests.csproj", "{31FE42A6-946E-4482-B3F5-6AEEC1271B59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable", "bleak.Api.Rest.Portable\bleak.Api.Rest.Portable.csproj", "{72CCFE63-BE65-46DE-9BDC-A264A6FCBD88}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CCDB84D-EBCE-4DD2-9733-BAB0390BD5E6}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yaml = azure-pipelines.yaml
@@ -20,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Logo.128x83.png = Logo.128x83.png
 		Logo.logoist = Logo.logoist
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bleak.Api.Rest.Portable.Tests", "bleak.Api.Rest.Portable.Tests\bleak.Api.Rest.Portable.Tests.csproj", "{2983CE49-D465-4956-ADF2-4040CF597637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
