@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 
-namespace bleak.Api.Rest.Common
+namespace bleak.Api.Rest
 {
 
     public class BaseRestManager

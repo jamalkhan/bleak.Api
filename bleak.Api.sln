@@ -5,10 +5,6 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest", "bleak.Api.Rest\bleak.Api.Rest.csproj", "{F2447FBC-6776-4B79-9A4D-9A38663882BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common", "bleak.Api.Rest.Common\bleak.Api.Rest.Common.csproj", "{8504798F-2C1D-4760-B4A6-DF94A7B15C71}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Common.Tests", "bleak.Api.Rest.Common.Tests\bleak.Api.Rest.Common.Tests.csproj", "{0A32C837-9DD9-462E-B137-7CF5CA0939BB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bleak.Api.Rest.Tests", "bleak.Api.Rest.Tests\bleak.Api.Rest.Tests.csproj", "{31FE42A6-946E-4482-B3F5-6AEEC1271B59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CCDB84D-EBCE-4DD2-9733-BAB0390BD5E6}"

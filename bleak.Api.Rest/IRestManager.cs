@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace bleak.Api.Rest.Common
+namespace bleak.Api.Rest
 {
     public interface IRestManager
     {

@@ -1,4 +1,3 @@
-﻿using bleak.Api.Rest.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,85 +8,8 @@ using System.Text;
 
 namespace bleak.Api.Rest
 {
-    public class CoreRestManager : BaseRestManager, IRestManager
+    public partial class RestManager
     {
-        public CoreRestManager(ISerializer serializer, IDeserializer deserializer)
-        {
-            _serializer = serializer;
-            _deserializer = deserializer;
-            _userAgent = $"{new StackTrace().GetFrame(1).GetMethod().DeclaringType.Assembly.GetName().Name} API Connector/{GetType().Assembly.GetName().Version} ({Environment.OSVersion.ToString()})";
-        }
-
-        public RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
-        (
-            Uri uri,
-            HttpVerbs verb = HttpVerbs.GET,
-            object payload = null,
-            string serializedPayload = null,
-            IEnumerable<FormParameter> parameters = null,
-            IEnumerable<Header> headers = null,
-            string username = null,
-            string password = null,
-            string accept = null,
-            string contentType = "application/json"
-        )
-        {
-            string url = uri.ToString();
-            string method = verb.ToString();
-
-            //if (!AcceptedMethods.Contains(method))
-            //    throw new ArgumentException(method + " is not currently supported.", method);
-
-            if (payload != null && !string.IsNullOrEmpty(serializedPayload) && parameters != null)
-            {
-                throw new ArgumentOutOfRangeException("payload, serializedPayload, and pameters are mutually exclusive.");
-            }
-
-            if (string.IsNullOrEmpty(url))
-            {
-                throw new ArgumentNullException("url");
-            }
-
-            var summary = new RequestResponseSummary<TSuccess, TError>();
-
-            try
-            {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-
-                ManageHeaders(
-                   httpWebRequest: httpWebRequest,
-                   method: method,
-                   headers: headers,
-                   username: username,
-                   password: password,
-                   accept: accept,
-                   contentType: contentType
-                   //cookieContainer: cookieContainer
-                   );
-
-                BuildPayload(payload, serializedPayload, parameters, httpWebRequest, ref summary);
-
-                SubmitResponseUsing<TSuccess, TError>(ref summary, httpWebRequest);
-
-                return summary;
-            }
-            catch (WebException ex)
-            {
-                HandleWebException<TSuccess, TError>(
-                    summary: ref summary,
-                    url: url,
-                    ex: ex);
-                return summary;
-            }
-            catch (Exception ex)
-            {
-                summary.Results = default(TSuccess);
-                summary.UnhandledError = ex.Message;
-                summary.Status = 0;
-                return summary;
-            }
-        }
-
         /// <summary>
         /// TODO: Could probably consolidate with ExecuteRestMethod if formParameters can be &= or multiparted.
         /// </summary>
@@ -270,12 +192,26 @@ namespace bleak.Api.Rest
             }
         }
 
-        private void BuildPayload<TSuccess, TError>(
-            object payload,
-            string serializedPayload,
-            IEnumerable<FormParameter> formPameters,
+
+        const string defaultPayload = "";
+
+
+        /// <summary>
+        /// If payload, serializedPayload, or formParamters are provided, adds the payload to the HttpRequest using a StreamWriter
+        /// </summary>
+        /// <typeparam name="TSuccess"></typeparam>
+        /// <typeparam name="TError"></typeparam>
+        /// <param name="httpWebRequest"></param>
+        /// <param name="summary"></param>
+        /// <param name="payload">Optional. A dotnet POCO object representing the object to be serialized, using the provided serializer, and transmitted over the wire.  Only provide this if both formParameters and serializedPayload are null </param>
+        /// <param name="serializedPayload">Optional. A dotnet string representing the pre-rendered payload. Only provide this if both payload and formParameters are null</param>
+        /// <param name="formPametersOptional. A collection of FormParameters, representing HTML From Parameters. Only provide this if both payload and serializedPayload are null"></param>
+        private void RenderPayload<TSuccess, TError>(
             HttpWebRequest httpWebRequest,
-            ref RequestResponseSummary<TSuccess, TError> summary
+            ref RequestResponseSummary<TSuccess, TError> summary,
+            object payload = null,
+            string serializedPayload = defaultPayload,
+            IEnumerable<FormParameter> formPameters = null
             )
         {
             if (payload != null)
@@ -310,6 +246,7 @@ namespace bleak.Api.Rest
         }
 
         // TODO: Remove this
+        /*
         protected byte[] GetFormData<TSuccess, TError>(
             ref RequestResponseSummary<TSuccess, TError> summary,
             params FormParameter[] parms)
@@ -333,6 +270,6 @@ namespace bleak.Api.Rest
             summary.SerializedRequest = sb.ToString();
             var formData = Encoding.Unicode.GetBytes(sb.ToString());
             return formData;
-        }
+        }*/
     }
 }

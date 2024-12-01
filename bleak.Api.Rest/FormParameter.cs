@@ -1,4 +1,4 @@
-﻿namespace bleak.Api.Rest.Common
+﻿namespace bleak.Api.Rest
 {
 
     public class FormParameter

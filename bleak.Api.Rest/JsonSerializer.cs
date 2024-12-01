@@ -1,4 +1,4 @@
-﻿using bleak.Api.Rest.Common;
+﻿using bleak.Api.Rest;
 using Newtonsoft.Json;
 
 namespace bleak.Api.Rest

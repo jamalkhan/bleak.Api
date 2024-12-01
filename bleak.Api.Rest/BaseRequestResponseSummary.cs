@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace bleak.Api.Rest.Common
+namespace bleak.Api.Rest
 {
     public abstract class BaseRequestResponseSummary
     {
