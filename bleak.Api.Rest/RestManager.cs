@@ -33,24 +33,6 @@ namespace bleak.Api.Rest
             string contentType = "application/json"
         )
         {
-            throw new NotImplementedException();
-        }
-
-
-        public RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
-        (
-            Uri uri,
-            HttpVerbs verb = HttpVerbs.GET,
-            object payload = null,
-            string serializedPayload = null,
-            IEnumerable<FormParameter> parameters = null,
-            IEnumerable<Header> headers = null,
-            string username = null,
-            string password = null,
-            string accept = null,
-            string contentType = "application/json"
-        )
-        {
             string url = uri.ToString();
             string method = verb.ToString();
 
@@ -105,6 +87,37 @@ namespace bleak.Api.Rest
                 summary.Status = 0;
                 return summary;
             }
+        }
+
+
+        public RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
+        (
+            Uri uri,
+            HttpVerbs verb = HttpVerbs.GET,
+            object payload = null,
+            string serializedPayload = null,
+            IEnumerable<FormParameter> parameters = null,
+            IEnumerable<Header> headers = null,
+            string username = null,
+            string password = null,
+            string accept = null,
+            string contentType = "application/json"
+        )
+        {
+            var result = ExecuteRestMethodAsync<TSuccess, TError>(
+                uri: uri,
+                verb: verb,
+                payload: payload,
+                serializedPayload: serializedPayload,
+                parameters: parameters,
+                headers: headers,
+                username: username,
+                password: password,
+                accept: accept,
+                contentType: contentType
+            );
+            var retval = result.GetAwaiter();
+            return retval.GetResult();
         }
     }
 }
