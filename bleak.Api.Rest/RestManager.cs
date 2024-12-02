@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
@@ -19,7 +16,7 @@ namespace bleak.Api.Rest
         }
 
 
-        public async Task<RequestResponseSummary<TSuccess, TError>> ExecuteRestMethodAsync<TSuccess, TError>
+        public async Task<RestResults<TSuccess, TError>> ExecuteRestMethodAsync<TSuccess, TError>
         (
             Uri uri,
             HttpVerbs verb = HttpVerbs.GET,
@@ -49,7 +46,7 @@ namespace bleak.Api.Rest
                 throw new ArgumentNullException("url");
             }
 
-            var summary = new RequestResponseSummary<TSuccess, TError>();
+            var summary = new RestResults<TSuccess, TError>();
 
             try
             {
@@ -66,9 +63,9 @@ namespace bleak.Api.Rest
                    //cookieContainer: cookieContainer
                    );
 
-                RenderPayload( httpWebRequest, ref summary, payload, serializedPayload, parameters);
+                RenderPayload(httpWebRequest, ref summary, payload, serializedPayload, parameters);
 
-                SubmitResponseUsing<TSuccess, TError>(ref summary, httpWebRequest);
+                await SubmitRequestAsync<TSuccess, TError>(httpWebRequest, summary);
 
                 return summary;
             }
@@ -90,7 +87,7 @@ namespace bleak.Api.Rest
         }
 
 
-        public RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
+        public RestResults<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>
         (
             Uri uri,
             HttpVerbs verb = HttpVerbs.GET,

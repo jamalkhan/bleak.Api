@@ -23,7 +23,7 @@ namespace bleak.Api.Rest
         /// <param name="contentType">Content type.</param>
         /// <typeparam name="TSuccess">The 1st type parameter.</typeparam>
         /// <typeparam name="TError">The 2nd type parameter.</typeparam>
-        RequestResponseSummary<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>(
+        RestResults<TSuccess, TError> ExecuteRestMethod<TSuccess, TError>(
             Uri uri,
             HttpVerbs verb = HttpVerbs.GET,
             object payload = null,

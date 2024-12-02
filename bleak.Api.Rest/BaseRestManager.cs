@@ -23,7 +23,7 @@ namespace bleak.Api.Rest
         }
 
         protected virtual byte[] GetFormData<TSuccess, TError>(
-            ref RequestResponseSummary<TSuccess, TError> summary,
+            ref RestResults<TSuccess, TError> summary,
             params FormParameter[] parms)
         {
             var sb = new StringBuilder();

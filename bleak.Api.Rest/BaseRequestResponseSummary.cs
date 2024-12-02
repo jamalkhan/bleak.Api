@@ -2,7 +2,7 @@
 
 namespace bleak.Api.Rest
 {
-    public abstract class BaseRequestResponseSummary
+    public abstract class BaseHttpResults
     {
         public string SerializedRequest { get; set; }
         public string SerializedResponse { get; set; }

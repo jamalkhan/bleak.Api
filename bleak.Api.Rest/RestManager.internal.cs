@@ -1,38 +1,91 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
 {
     public partial class RestManager
     {
-        /// <summary>
-        /// TODO: Could probably consolidate with ExecuteRestMethod if formParameters can be &= or multiparted.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="summary"></param>
-        /// <param name="httpWebRequest"></param>
-        /// <returns></returns>
-        protected void SubmitResponseUsing<TSuccess, TError>(
-            ref RequestResponseSummary<TSuccess, TError> summary,
-            HttpWebRequest httpWebRequest
-            )
+        protected async Task SubmitRequestAsync<TSuccess, TError>(
+            HttpWebRequest httpWebRequest,
+            RestResults<TSuccess, TError> summary
+        )
         {
-            var asyncresponse = httpWebRequest.GetResponseAsync();
-            // TODO: Implement a true Async experience
-
-            using (var response = asyncresponse.Result)
+            try
             {
-                ProcessResponse<TSuccess, TError>(
-                    summary: ref summary,
-                    response: response);
+                using (var response = await httpWebRequest.GetResponseAsync())
+                {
+                    ProcessResponse(
+                        summary: ref summary,
+                        response: response);
+                }
+            }
+            catch (WebException ex) 
+            {
+                    ProcessWebException(summary: ref summary, ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"This request failed as a exception {ex.Message}");
+            }
+        }
+
+
+        /// <summary>
+        /// Processes the response.
+        /// </summary>
+        /// <returns>The response.</returns>
+        /// <param name="summary">Summary.</param>
+        /// <param name="response">Response.</param>
+        /// <typeparam name="TSuccess">The 1st type parameter.</typeparam>
+        /// <typeparam name="TError">The 2nd type parameter.</typeparam>
+        private RestResults<TSuccess, TError> ProcessWebException<TSuccess, TError>(
+            ref RestResults<TSuccess, TError> summary,
+            WebException ex)
+        {
+            if (ex.Response == null)
+            {
+                Console.WriteLine("Web Exception Response is null");
             }
 
+            var httpResponse = (HttpWebResponse)ex.Response;
+            summary.Status = httpResponse.StatusCode;
+
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var responseText = streamReader.ReadToEnd();
+                summary.SerializedResponse = responseText;
+                if (string.IsNullOrWhiteSpace(responseText))
+                {
+                    summary.Error = default(TError);
+                    return summary;
+                }
+                try
+                {
+                    if (typeof(TError).Name == "String")
+                    {
+                        summary.Error = (TError)Convert.ChangeType(responseText.Trim(), typeof(TError));
+                        return summary;
+                    }
+                    else
+                    {
+                        summary.Error = _deserializer.Deserialize<TError>(responseText);
+                        return summary;
+                    }
+                }
+                catch (Exception ex2)
+                {
+                    summary.UnhandledError = ex2.Message;
+                    return null;
+                }
+            }
         }
+
+
 
 
         private void ManageHeaders(
@@ -103,7 +156,7 @@ namespace bleak.Api.Rest
         }
 
         protected void HandleWebException<TSuccess, TError>(
-                ref RequestResponseSummary<TSuccess, TError> summary,
+                ref RestResults<TSuccess, TError> summary,
                 string url,
                 WebException ex)
         {
@@ -154,8 +207,8 @@ namespace bleak.Api.Rest
         /// <param name="response">Response.</param>
         /// <typeparam name="TSuccess">The 1st type parameter.</typeparam>
         /// <typeparam name="TError">The 2nd type parameter.</typeparam>
-        private RequestResponseSummary<TSuccess, TError> ProcessResponse<TSuccess, TError>(
-            ref RequestResponseSummary<TSuccess, TError> summary,
+        private RestResults<TSuccess, TError> ProcessResponse<TSuccess, TError>(
+            ref RestResults<TSuccess, TError> summary,
             WebResponse response)
         {
             var httpResponse = (HttpWebResponse)response;
@@ -208,7 +261,7 @@ namespace bleak.Api.Rest
         /// <param name="formPametersOptional. A collection of FormParameters, representing HTML From Parameters. Only provide this if both payload and serializedPayload are null"></param>
         private void RenderPayload<TSuccess, TError>(
             HttpWebRequest httpWebRequest,
-            ref RequestResponseSummary<TSuccess, TError> summary,
+            ref RestResults<TSuccess, TError> summary,
             object payload = null,
             string serializedPayload = defaultPayload,
             IEnumerable<FormParameter> formPameters = null
