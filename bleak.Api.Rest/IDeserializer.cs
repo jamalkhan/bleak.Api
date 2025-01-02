@@ -8,6 +8,6 @@
     /// <returns>An Instantiated Object from the data string</returns>
     public interface IDeserializer
     {
-        T Deserialize<T>(string data);
+        T Deserialize<T>(string data) where T : class;
     }
 }

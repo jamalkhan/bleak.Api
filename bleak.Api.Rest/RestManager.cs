@@ -29,6 +29,8 @@ namespace bleak.Api.Rest
             string accept = null,
             string contentType = "application/json"
         )
+            where TSuccess : class
+            where TError : class
         {
             string url = uri.ToString();
             string method = verb.ToString();
@@ -100,6 +102,8 @@ namespace bleak.Api.Rest
             string accept = null,
             string contentType = "application/json"
         )
+            where TSuccess : class
+            where TError : class
         {
             var result = ExecuteRestMethodAsync<TSuccess, TError>(
                 uri: uri,

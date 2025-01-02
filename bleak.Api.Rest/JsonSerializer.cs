@@ -30,6 +30,7 @@ namespace bleak.Api.Rest
         /// <param name="json">The JSON string to Deserialize</param>
         /// <returns>An Instantiated Object from the JSON</returns>
         public T Deserialize<T>(string json)
+            where T : class
         {
             return JsonConvert.DeserializeObject<T>(json);
         }

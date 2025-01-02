@@ -14,6 +14,8 @@ namespace bleak.Api.Rest
             HttpWebRequest httpWebRequest,
             RestResults<TSuccess, TError> summary
         )
+            where TSuccess : class
+            where TError : class
         {
             try
             {
@@ -46,6 +48,8 @@ namespace bleak.Api.Rest
         private RestResults<TSuccess, TError> ProcessWebException<TSuccess, TError>(
             ref RestResults<TSuccess, TError> summary,
             WebException ex)
+            where TSuccess : class
+            where TError : class
         {
             if (ex.Response == null)
             {
@@ -159,6 +163,8 @@ namespace bleak.Api.Rest
                 ref RestResults<TSuccess, TError> summary,
                 string url,
                 WebException ex)
+            where TSuccess : class
+            where TError : class
         {
 
             if (ex.Response != null)
@@ -210,6 +216,8 @@ namespace bleak.Api.Rest
         private RestResults<TSuccess, TError> ProcessResponse<TSuccess, TError>(
             ref RestResults<TSuccess, TError> summary,
             WebResponse response)
+            where TSuccess : class
+            where TError : class
         {
             var httpResponse = (HttpWebResponse)response;
             summary.Status = httpResponse.StatusCode;
@@ -266,6 +274,8 @@ namespace bleak.Api.Rest
             string serializedPayload = defaultPayload,
             IEnumerable<FormParameter> formPameters = null
             )
+            where TSuccess : class
+            where TError : class
         {
             if (payload != null)
             {
@@ -300,9 +310,13 @@ namespace bleak.Api.Rest
 
         // TODO: Remove this
         /*
-        protected byte[] GetFormData<TSuccess, TError>(
+        protected byte[] GetFormData<TSuccess, TError>
+        (
             ref RequestResponseSummary<TSuccess, TError> summary,
-            params FormParameter[] parms)
+            params FormParameter[] parms
+        )
+            where TSuccess : class
+            where TError : class
         {
             var sb = new StringBuilder();
             bool firstTime = true;
