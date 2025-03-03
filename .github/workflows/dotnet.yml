@@ -4,37 +4,37 @@
 name: .NET
 
 on:
-  push:
-    branches: [ "prod" ]
-  pull_request:
-    branches: [ "prod" ]
+    push:
+        branches: [ "prod" ]
+    pull_request:
+        branches: [ "prod" ]
 
 jobs:
-  build:
+    build:
 
-    runs-on: ubuntu-latest
+        runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup .NET
+            uses: actions/setup-dotnet@v4
+            with:
+                dotnet-version: 8.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore
+        - name: Restore dependencies
+            run: dotnet restore
 
-    - name: Build bleak.Api.Rest
-      run: dotnet build --configuration Release bleak.Api.Rest
+        - name: Build bleak.Api.Rest
+            run: dotnet build --configuration Release bleak.Api.Rest
 
-    - name: Build bleak.Api.Rest.Tests
-      run: dotnet build --configuration Release bleak.Api.Rest.Tests
+        - name: Build bleak.Api.Rest.Tests
+            run: dotnet build --configuration Release bleak.Api.Rest.Tests
 
-    - name: Run unit tests
-      run: dotnet test bleak.Api.Rest.Tests
+        - name: Run unit tests
+            run: dotnet test bleak.Api.Rest.Tests
 
-      - name: Pack bleak.Api.Rest
-        run: dotnet pack --configuration Release bleak.Api.Rest --output ./nupkg
+        - name: Pack bleak.Api.Rest
+            run: dotnet pack --configuration Release bleak.Api.Rest --output ./nupkg
 
-      - name: Publish to NuGet
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        - name: Publish to NuGet
+            run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
