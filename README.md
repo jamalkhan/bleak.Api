@@ -47,7 +47,7 @@ Perfectly valid to use strings. Can also use POCOs. If you want more sophisticat
 - Automated deployment of NUGET packages (Azure DevOps deployment is currently broken)
 - Retry logic for use with things like OAUTH based authentication. You can totally do OAuth manually right now... just make an AuthRequest, and then attach the auth variable.
 
-If you like what I do, you're welcome to buy me a coffee.
+### If you like what I do, you're welcome to buy me a coffee.
 
 Bitcoin Address: bc1qrwysp9a5mqthnz6aygn527xjkg58lcd7u5jdz5
 Solana Address: 9Y8ZUL1MqXQkE5D2Qj9gx5mgkXkXct22jkQ3Ucj5z5N3
