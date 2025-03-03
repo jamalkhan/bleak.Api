@@ -31,4 +31,4 @@ jobs:
       run: dotnet build --configuration Release bleak.Api.Rest.Tests
 
     - name: Run unit tests
-      run: dotnet test --no-build --verbosity normal bleak.Api.Rest.Tests
+      run: dotnet test --no-build
