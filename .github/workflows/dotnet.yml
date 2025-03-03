@@ -21,6 +21,18 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Read version.txt
+      id: version
+      run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+
+    - name: Generate build number
+      id: build-number
+      run: echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+
+    - name: Set full version
+      id: set-version
+      run: echo "FULL_VERSION=${VERSION}.${BUILD_NUMBER}" >> $GITHUB_ENV
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -31,7 +43,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     
     - name: Pack bleak.Api.Rest
-      run: dotnet pack --configuration Release bleak.Api.Rest --output ./nupkg
+      run: dotnet pack --configuration Release /p:Version=${FULL_VERSION} bleak.Api.Rest --output ./nupkg
     
     - name: Publish to NuGet
       run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
