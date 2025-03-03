@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
@@ -117,8 +118,7 @@ namespace bleak.Api.Rest
                 accept: accept,
                 contentType: contentType
             );
-            var retval = result.GetAwaiter();
-            return retval.GetResult();
+            return result.ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }
