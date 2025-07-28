@@ -26,7 +26,8 @@ namespace bleak.Api.Rest.Tests
             var s = "https://reqres.in/api/users/2";
             var restManager = new RestManager(serializer, serializer);
             var results = restManager.ExecuteRestMethod<GetUserTestPoco, string>(uri: new Uri(s), verb: HttpVerbs.GET);
-
+            Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
+            Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             Assert.IsTrue(results.Results.data.id > 0);
             Assert.IsTrue(results.Results.data.first_name == "Janet");
             Assert.IsTrue(results.Results.data.last_name == "Weaver");
