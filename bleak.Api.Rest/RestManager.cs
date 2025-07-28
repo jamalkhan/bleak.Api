@@ -25,7 +25,7 @@ namespace bleak.Api.Rest
         /// <param name="verb">The HTTP verb to use for the request (default is GET).</param>
         /// <param name="payload">The object to be serialized and sent as the request body (optional).</param>
         /// <param name="serializedPayload">A pre-serialized payload to send as the request body (optional).</param>
-        /// <param name="parameters">A collection of form parameters to include in the request (optional).</param>
+        /// <param name="parameters">A collection of form parameters to include i           n the request (optional).</param>
         /// <param name="headers">A collection of headers to include in the request (optional).</param>
         /// <param name="username">The username for basic authentication (optional).</param>
         /// <param name="password">The password for basic authentication (optional).</param>
