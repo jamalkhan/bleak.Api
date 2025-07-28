@@ -44,9 +44,12 @@ namespace bleak.Api.Rest.Tests
             var results = restManager.ExecuteRestMethod<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
-                payload: payload
+                payload: payload,
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
                 );
             
+            Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
+            Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             Assert.IsTrue(int.Parse(results.Results.id) > 0);
             Assert.IsTrue(results.Results.name == "jamal");
             Assert.IsTrue(results.Results.job == "engineer");
@@ -68,9 +71,12 @@ namespace bleak.Api.Rest.Tests
             var results = restManager.ExecuteRestMethod<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
-                payload: payload
+                payload: payload,
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
                 );
             
+            Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
+            Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             Assert.IsTrue(results.Results.name == "jamal");
             Assert.IsTrue(results.Results.job == "test engineer");
             
@@ -91,9 +97,11 @@ namespace bleak.Api.Rest.Tests
             var results = restManager.ExecuteRestMethod<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
-                payload: payload
+                payload: payload,headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
                 );
             
+            Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
+            Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             //Assert.IsTrue(results.HttpCode == 200);
             Assert.IsTrue(!string.IsNullOrEmpty(results.Results.token));
         }
@@ -108,7 +116,8 @@ namespace bleak.Api.Rest.Tests
             var results = restManager.ExecuteRestMethod<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
-                payload: payload
+                payload: payload,
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}      
                 );
             
             //Assert.IsTrue(results.HttpCode == 400);
