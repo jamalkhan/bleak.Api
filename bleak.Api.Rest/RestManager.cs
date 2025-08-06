@@ -89,7 +89,7 @@ namespace bleak.Api.Rest
                    //cookieContainer: cookieContainer
                    );
 
-                RenderPayload(httpWebRequest, ref summary, payload, serializedPayload, parameters);
+                await RenderPayloadAsync(httpWebRequest, summary, payload, serializedPayload, parameters);
 
                 await SubmitRequestAsync<TSuccess, TError>(httpWebRequest, summary);
 

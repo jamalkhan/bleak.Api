@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using bleak.Api.Rest;
 using System;
+using System.Threading.Tasks;
 
 namespace bleak.Api.Rest.Tests
 {
@@ -10,12 +11,19 @@ namespace bleak.Api.Rest.Tests
         JsonSerializer serializer = new JsonSerializer();
 
         [TestMethod]
-        public void GetSuccessStringTest()
+        public async Task GetSuccessStringTest()
         {
-            var s = "https://google.com";
+            var s = "https://www.google.com";
+            Console.WriteLine($"Testing {s}");
             var restManager = new RestManager(serializer, serializer);
-            var results = restManager.ExecuteRestMethod<string, string>(uri: new Uri(s), verb: HttpVerbs.GET);
-            Assert.IsTrue(results.Results.Contains("<body"));
+            var results = await restManager.ExecuteRestMethodAsync<string, string>(
+                uri: new Uri(s),
+                verb: HttpVerbs.GET);
+            Console.WriteLine(results.Results);
+            Console.WriteLine($"results: {serializer.Serialize(results)}");
+            Console.WriteLine($"results.Results: {results.Results}");
+            Console.WriteLine($"results.SerializedResponse: {results.SerializedResponse}");
+            Assert.IsTrue(results?.Results?.Contains("<body"));
         }
 
         // Using https://reqres.in/ as tests
@@ -111,18 +119,19 @@ namespace bleak.Api.Rest.Tests
         public void LoginFailureTest()
         {
             var s = "https://reqres.in/api/login";
-            var payload = new LoginTestPoco { email="eve.holt@reqres.in" };
+            var payload = new LoginTestPoco { email = "eve.holt@reqres.in" };
 
             var restManager = new RestManager(serializer, serializer);
             var results = restManager.ExecuteRestMethod<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
-                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}      
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" } }
                 );
-            
+
             //Assert.IsTrue(results.HttpCode == 400);
             Assert.IsTrue(!string.IsNullOrEmpty(results.Error.error));
+            Assert.IsTrue(results.Error.error.Contains("Missing Password"));
         }
     }
 }

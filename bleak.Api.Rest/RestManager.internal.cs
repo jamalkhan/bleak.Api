@@ -21,14 +21,14 @@ namespace bleak.Api.Rest
             {
                 using (var response = await httpWebRequest.GetResponseAsync())
                 {
-                    ProcessResponse(
-                        summary: ref summary,
+                    ProcessResponseAsync(
+                        summary: summary,
                         response: response);
                 }
             }
             catch (WebException ex) 
             {
-                    ProcessWebException(summary: ref summary, ex);
+                await ProcessWebExceptionAsync(summary: summary, ex: ex);
             }
             catch (Exception ex)
             {
@@ -45,8 +45,8 @@ namespace bleak.Api.Rest
         /// <param name="response">Response.</param>
         /// <typeparam name="TSuccess">The 1st type parameter.</typeparam>
         /// <typeparam name="TError">The 2nd type parameter.</typeparam>
-        private RestResults<TSuccess, TError> ProcessWebException<TSuccess, TError>(
-            ref RestResults<TSuccess, TError> summary,
+        private async Task<RestResults<TSuccess, TError>> ProcessWebExceptionAsync<TSuccess, TError>(
+            RestResults<TSuccess, TError> summary,
             WebException ex)
             where TSuccess : class
             where TError : class
@@ -61,7 +61,7 @@ namespace bleak.Api.Rest
 
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                var responseText = streamReader.ReadToEnd();
+                var responseText = await streamReader.ReadToEndAsync();
                 summary.SerializedResponse = responseText;
                 if (string.IsNullOrWhiteSpace(responseText))
                 {
@@ -205,16 +205,8 @@ namespace bleak.Api.Rest
         }
 
 
-        /// <summary>
-        /// Processes the response.
-        /// </summary>
-        /// <returns>The response.</returns>
-        /// <param name="summary">Summary.</param>
-        /// <param name="response">Response.</param>
-        /// <typeparam name="TSuccess">The 1st type parameter.</typeparam>
-        /// <typeparam name="TError">The 2nd type parameter.</typeparam>
-        private RestResults<TSuccess, TError> ProcessResponse<TSuccess, TError>(
-            ref RestResults<TSuccess, TError> summary,
+        private async Task<RestResults<TSuccess, TError>> ProcessResponseAsync<TSuccess, TError>(
+            RestResults<TSuccess, TError> summary,
             WebResponse response)
             where TSuccess : class
             where TError : class
@@ -224,34 +216,36 @@ namespace bleak.Api.Rest
 
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
-                var responseText = streamReader.ReadToEnd();
+                var responseText = await streamReader.ReadToEndAsync();
                 summary.SerializedResponse = responseText;
+
                 if (string.IsNullOrWhiteSpace(responseText))
                 {
-
-                    summary.Results = default(TSuccess);
+                    summary.Results = default;
                     return summary;
                 }
+
                 try
                 {
-                    if (typeof(TSuccess).Name == "String")
+                    if (typeof(TSuccess) == typeof(string))
                     {
-                        summary.Results = (TSuccess)Convert.ChangeType(responseText.Trim(), typeof(TSuccess));
-                        return summary;
+                        summary.Results = (TSuccess)(object)responseText.Trim(); // Safe cast for string type
                     }
                     else
                     {
                         summary.Results = _deserializer.Deserialize<TSuccess>(responseText);
-                        return summary;
                     }
+
+                    return summary;
                 }
                 catch (Exception ex2)
                 {
                     summary.UnhandledError = ex2.Message;
-                    return null;
+                    return null; // or optionally return summary with error set
                 }
             }
         }
+
 
 
         const string defaultPayload = "";
@@ -267,13 +261,12 @@ namespace bleak.Api.Rest
         /// <param name="payload">Optional. A dotnet POCO object representing the object to be serialized, using the provided serializer, and transmitted over the wire.  Only provide this if both formParameters and serializedPayload are null </param>
         /// <param name="serializedPayload">Optional. A dotnet string representing the pre-rendered payload. Only provide this if both payload and formParameters are null</param>
         /// <param name="formPametersOptional. A collection of FormParameters, representing HTML From Parameters. Only provide this if both payload and serializedPayload are null"></param>
-        private void RenderPayload<TSuccess, TError>(
+        private async Task RenderPayloadAsync<TSuccess, TError>(
             HttpWebRequest httpWebRequest,
-            ref RestResults<TSuccess, TError> summary,
+            RestResults<TSuccess, TError> summary,
             object payload = null,
             string serializedPayload = defaultPayload,
-            IEnumerable<FormParameter> formPameters = null
-            )
+            IEnumerable<FormParameter> formParameters = null)
             where TSuccess : class
             where TError : class
         {
@@ -281,6 +274,7 @@ namespace bleak.Api.Rest
             {
                 serializedPayload = _serializer.Serialize(payload);
             }
+
             if (!string.IsNullOrEmpty(serializedPayload))
             {
                 if (summary != null)
@@ -288,25 +282,23 @@ namespace bleak.Api.Rest
                     summary.SerializedRequest = serializedPayload;
                 }
 
-                // TODO: Really make this an Async behavior
-                var asyncResult = httpWebRequest.GetRequestStreamAsync();
-                using (var stream = new StreamWriter(asyncResult.Result))
+                using (var stream = new StreamWriter(await httpWebRequest.GetRequestStreamAsync()))
                 {
-                    stream.Write(serializedPayload);
+                    await stream.WriteAsync(serializedPayload);
                 }
             }
-            if (formPameters != null && formPameters.Count() > 0)
-            {
-                var formData = GetFormData(ref summary, formPameters.ToArray());
 
-                // TODO: Really make this an Async behavior
-                var asyncResult = httpWebRequest.GetRequestStreamAsync();
-                using (var stream = asyncResult.Result)
+            if (formParameters != null && formParameters.Any())
+            {
+                var formData = GetFormData(summary, formParameters.ToArray());
+
+                using (var stream = await httpWebRequest.GetRequestStreamAsync())
                 {
-                    stream.Write(formData, 0, formData.Length);
+                    await stream.WriteAsync(formData, 0, formData.Length);
                 }
             }
         }
+
 
         // TODO: Remove this
         /*
