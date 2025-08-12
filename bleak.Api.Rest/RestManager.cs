@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
 {
+    [Obsolete("RestManager is obsolete, use RestClient instead.")]
     public partial class RestManager : BaseRestManager, IRestManager
     {
         public RestManager(ISerializer serializer, IDeserializer deserializer)

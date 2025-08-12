@@ -5,23 +5,27 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace bleak.Api.Rest
 {
 
-    public class RestClient : IRestManagerAsync
+    public class RestClient : IRestClientAsync
     {
+        private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
         private readonly ISerializer _serializer;
         private readonly IDeserializer _deserializer;
 
         public RestClient(HttpClient httpClient = null,
         ISerializer serializer = null,
-         IDeserializer deserializer = null)
+         IDeserializer deserializer = null,
+         ILogger logger = null)
         {
             _httpClient = httpClient ?? new HttpClient();
             _serializer = serializer ?? new JsonSerializer();
             _deserializer = deserializer ?? serializer as IDeserializer ?? new JsonSerializer();
+            _logger = logger;
         }
 
         public async Task<RestResults<TSuccess, TError>> ExecuteRestMethodAsync<TSuccess, TError>
@@ -41,6 +45,8 @@ namespace bleak.Api.Rest
             where TSuccess : class
             where TError : class
         {
+            _logger?.LogInformation($"Executing REST method: {verb} {uri}");
+
             if (payload != null && !string.IsNullOrEmpty(serializedPayload) && parameters != null)
                 throw new ArgumentOutOfRangeException("payload, serializedPayload, and parameters are mutually exclusive.");
 
@@ -55,7 +61,17 @@ namespace bleak.Api.Rest
             {
                 ManageHeaders(request, headers, username, password, accept, contentType);
 
-                await RenderPayloadAsync(request, summary, payload, serializedPayload, parameters, contentType, cancellationToken).ConfigureAwait(false);
+                await RenderPayloadAsync
+                (
+                    request,
+                    summary,
+                    payload,
+                    serializedPayload,
+                    parameters,
+                    contentType,
+                    cancellationToken
+                )
+                    .ConfigureAwait(false);
 
                 var response = await _httpClient.SendAsync
                 (
@@ -114,6 +130,12 @@ namespace bleak.Api.Rest
             {
                 request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
             }
+
+            _logger?.LogTrace($"Request Headers: {string.Join(", ", request.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))}");
+            if (request.Content != null)
+            {
+                _logger?.LogTrace($"Content-Type: {request.Content.Headers.ContentType?.MediaType}");
+            }
         }
 
         private async Task RenderPayloadAsync<TSuccess, TError>
@@ -130,7 +152,9 @@ namespace bleak.Api.Rest
             where TError : class
         {
             if (payload != null)
+            {
                 serializedPayload = _serializer.Serialize(payload);
+            }
 
             if (!string.IsNullOrEmpty(serializedPayload))
             {
@@ -146,15 +170,16 @@ namespace bleak.Api.Rest
                         .Select(p => new KeyValuePair<string, string>(p.Name, p.Value.ToString()))
                 );
                 request.Content = formContent;
-#if NET5_0_OR_GREATER
+#if NET8_0_OR_GREATER
                 summary.SerializedRequest = await formContent.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 #else
                 summary.SerializedRequest = await formContent.ReadAsStringAsync();
 #endif
             }
+            _logger?.LogTrace($"Serialized Request: {summary.SerializedRequest}");
         }
-        
-        
+
+
         private async Task ProcessResponseAsync<TSuccess, TError>
         (
             HttpResponseMessage response,
@@ -167,11 +192,11 @@ namespace bleak.Api.Rest
             summary.Status = response.StatusCode;
 
             // TODO: Later implement a streaming approach for this.
-            #if NET5_0_OR_GREATER
+#if NET8_0_OR_GREATER
             string responseText = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            #else
+#else
             string responseText = await response.Content.ReadAsStringAsync();
-            #endif
+#endif
             summary.SerializedResponse = responseText;
 
             if (response.IsSuccessStatusCode)
@@ -206,6 +231,7 @@ namespace bleak.Api.Rest
                     summary.UnhandledError = ex.Message;
                 }
             }
+            _logger?.LogTrace($"Status: {summary.Status}, Serialized Response: {summary.SerializedResponse}");
         }
 
     }

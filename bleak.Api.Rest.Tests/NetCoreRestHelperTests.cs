@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace bleak.Api.Rest.Tests
 {
+#pragma warning disable CS0618 // Type or member is obsolete
     [TestClass]
     public class NetCoreRestHelperTests
     {
@@ -41,29 +42,29 @@ namespace bleak.Api.Rest.Tests
             Assert.IsTrue(results.Results.data.first_name == "Janet");
             Assert.IsTrue(results.Results.data.last_name == "Weaver");
             Assert.IsTrue(results.Results.data.avatar == "https://reqres.in/img/faces/2-image.jpg");
-            Assert.IsTrue(results.Results.support.text=="Tired of writing endless social media content? Let Content Caddy generate it for you.");
+            Assert.IsTrue(results.Results.support.text == "Tired of writing endless social media content? Let Content Caddy generate it for you.");
         }
 
         [TestMethod]
         public async Task PostUserTestAsync()
         {
             var s = "https://reqres.in/api/users";
-            var payload = new PostUserTestPoco{ name="jamal", job="engineer" };
+            var payload = new PostUserTestPoco { name = "jamal", job = "engineer" };
 
             var restManager = new RestManager(serializer, serializer);
             var results = await restManager.ExecuteRestMethodAsync<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
-                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" } }
                 );
-            
+
             Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
             Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             Assert.IsTrue(int.Parse(results.Results.id) > 0);
             Assert.IsTrue(results.Results.name == "jamal");
             Assert.IsTrue(results.Results.job == "engineer");
-            
+
             // Ensure the date is within -24 hours and +24 hours from now.
             // * I could test more precisely,
             // * but I'm not testing reqres.in's ability to generate a date;
@@ -75,21 +76,21 @@ namespace bleak.Api.Rest.Tests
         public async Task PutUserTest()
         {
             var s = "https://reqres.in/api/users/2";
-            var payload = new PostUserTestPoco{ name="jamal", job="test engineer" };
+            var payload = new PostUserTestPoco { name = "jamal", job = "test engineer" };
 
             var restManager = new RestManager(serializer, serializer);
             var results = await restManager.ExecuteRestMethodAsync<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
-                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
+                headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" } }
                 );
-            
+
             Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
             Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             Assert.IsTrue(results.Results.name == "jamal");
             Assert.IsTrue(results.Results.job == "test engineer");
-            
+
             // Ensure the date is within -24 hours and +24 hours from now.
             // * I could test more precisely,
             // * but I'm not testing reqres.in's ability to generate a date;
@@ -101,15 +102,15 @@ namespace bleak.Api.Rest.Tests
         public async Task LoginSuccessTest()
         {
             var s = "https://reqres.in/api/login";
-            var payload = new LoginTestPoco { email="eve.holt@reqres.in", password="abc123" };
+            var payload = new LoginTestPoco { email = "eve.holt@reqres.in", password = "abc123" };
 
             var restManager = new RestManager(serializer, serializer);
             var results = await restManager.ExecuteRestMethodAsync<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
-                payload: payload,headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
+                payload: payload, headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" } }
                 );
-            
+
             Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
             Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
             //Assert.IsTrue(results.HttpCode == 200);
@@ -135,4 +136,5 @@ namespace bleak.Api.Rest.Tests
             Assert.IsTrue(results.Error.error.Contains("Missing Password", StringComparison.InvariantCultureIgnoreCase));
         }
     }
+    #pragma warning restore CS0618
 }

@@ -21,7 +21,7 @@ namespace bleak.Api.Rest
             {
                 using (var response = await httpWebRequest.GetResponseAsync())
                 {
-                    ProcessResponseAsync(
+                    await ProcessResponseAsync(
                         summary: summary,
                         response: response);
                 }
@@ -153,7 +153,7 @@ namespace bleak.Api.Rest
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        throw new Exception("Error setting HTTP headers", ex);
                     }
                 }
             }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
 {
-    public interface IRestManagerAsync
+    public interface IRestClientAsync
     {
         /// <summary>
         /// Executes a REST method asynchronously using the specified parameters and returns the results.
