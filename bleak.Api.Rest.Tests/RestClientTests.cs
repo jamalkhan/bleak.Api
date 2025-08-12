@@ -8,11 +8,11 @@ namespace bleak.Api.Rest.Tests;
 
 
 [TestClass]
-public class RestClientTestsTests
+public class RestClientTests
 {
 
     [TestMethod]
-    public async Task RCGetSuccessStringTest()
+    public async Task RestClientGetSuccessStringTest()
     {
         var s = "https://www.google.com";
         Console.WriteLine($"Testing {s}");
@@ -27,7 +27,7 @@ public class RestClientTestsTests
     // Using https://reqres.in/ as tests
 
     [TestMethod]
-    public async Task RCGetSuccessUserTest()
+    public async Task RestClientGetSuccessUserTest()
     {
         var s = "https://reqres.in/api/users/2";
         var restClient = new RestClient();
@@ -43,7 +43,7 @@ public class RestClientTestsTests
     
 
     [TestMethod]
-    public async Task RCPostUserTest()
+    public async Task RestClientPostUserTest()
     {
         var s = "https://reqres.in/api/users";
         var payload = new PostUserTestPoco{ name="jamal", job="engineer" };
@@ -70,7 +70,7 @@ public class RestClientTestsTests
     }
 
     [TestMethod]
-    public async Task RCPutUserTest()
+    public async Task RestClientPutUserTest()
     {
         var s = "https://reqres.in/api/users/2";
         var payload = new PostUserTestPoco{ name="jamal", job="test engineer" };
@@ -96,7 +96,7 @@ public class RestClientTestsTests
     }
 
     [TestMethod]
-    public async Task RCLoginSuccessTest()
+    public async Task RestClientLoginSuccessTest()
     {
         var s = "https://reqres.in/api/login";
         var payload = new LoginTestPoco { email="eve.holt@reqres.in", password="abc123" };
@@ -115,7 +115,7 @@ public class RestClientTestsTests
     }
 
     [TestMethod]
-    public async Task RCLoginFailureTest()
+    public async Task RestClientLoginFailureTest()
     {
         var s = "https://reqres.in/api/login";
         var payload = new LoginTestPoco { email = "eve.holt@reqres.in" };
