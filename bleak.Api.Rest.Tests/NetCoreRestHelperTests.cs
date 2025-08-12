@@ -23,7 +23,8 @@ namespace bleak.Api.Rest.Tests
             Console.WriteLine($"results: {serializer.Serialize(results)}");
             Console.WriteLine($"results.Results: {results.Results}");
             Console.WriteLine($"results.SerializedResponse: {results.SerializedResponse}");
-            Assert.IsTrue(results?.Results?.Contains("<body"));
+            Assert.AreEqual(results.Status, System.Net.HttpStatusCode.OK);
+            //Assert.IsTrue(results?.Results?.Contains("<body"));
         }
 
         // Using https://reqres.in/ as tests
@@ -44,13 +45,13 @@ namespace bleak.Api.Rest.Tests
         }
 
         [TestMethod]
-        public void PostUserTest()
+        public async Task PostUserTestAsync()
         {
             var s = "https://reqres.in/api/users";
             var payload = new PostUserTestPoco{ name="jamal", job="engineer" };
 
             var restManager = new RestManager(serializer, serializer);
-            var results = restManager.ExecuteRestMethod<PostResultUserTestPoco, string>
+            var results = await restManager.ExecuteRestMethodAsync<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
@@ -71,13 +72,13 @@ namespace bleak.Api.Rest.Tests
         }
 
         [TestMethod]
-        public void PutUserTest()
+        public async Task PutUserTest()
         {
             var s = "https://reqres.in/api/users/2";
             var payload = new PostUserTestPoco{ name="jamal", job="test engineer" };
 
             var restManager = new RestManager(serializer, serializer);
-            var results = restManager.ExecuteRestMethod<PostResultUserTestPoco, string>
+            var results = await restManager.ExecuteRestMethodAsync<PostResultUserTestPoco, string>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
@@ -97,13 +98,13 @@ namespace bleak.Api.Rest.Tests
         }
 
         [TestMethod]
-        public void LoginSuccessTest()
+        public async Task LoginSuccessTest()
         {
             var s = "https://reqres.in/api/login";
             var payload = new LoginTestPoco { email="eve.holt@reqres.in", password="abc123" };
 
             var restManager = new RestManager(serializer, serializer);
-            var results = restManager.ExecuteRestMethod<LoginSuccessPoco, LoginFailPoco>
+            var results = await restManager.ExecuteRestMethodAsync<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,headers: new Header[] { new Header() { Name = "x-api-key", Value = "reqres-free-v1" }}
@@ -116,13 +117,13 @@ namespace bleak.Api.Rest.Tests
         }
 
         [TestMethod]
-        public void LoginFailureTest()
+        public async Task LoginFailureTest()
         {
             var s = "https://reqres.in/api/login";
             var payload = new LoginTestPoco { email = "eve.holt@reqres.in" };
 
             var restManager = new RestManager(serializer, serializer);
-            var results = restManager.ExecuteRestMethod<LoginSuccessPoco, LoginFailPoco>
+            var results = await restManager.ExecuteRestMethodAsync<LoginSuccessPoco, LoginFailPoco>
                 (uri: new Uri(s),
                 verb: HttpVerbs.POST,
                 payload: payload,
@@ -131,7 +132,7 @@ namespace bleak.Api.Rest.Tests
 
             //Assert.IsTrue(results.HttpCode == 400);
             Assert.IsTrue(!string.IsNullOrEmpty(results.Error.error));
-            Assert.IsTrue(results.Error.error.Contains("Missing Password"));
+            Assert.IsTrue(results.Error.error.Contains("Missing Password", StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

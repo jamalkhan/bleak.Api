@@ -21,7 +21,7 @@ namespace bleak.Api.Rest
         {
             _httpClient = httpClient ?? new HttpClient();
             _serializer = serializer ?? new JsonSerializer();
-            _deserializer = deserializer ?? new JsonSerializer();
+            _deserializer = deserializer ?? serializer as IDeserializer ?? new JsonSerializer();
         }
 
         public async Task<RestResults<TSuccess, TError>> ExecuteRestMethodAsync<TSuccess, TError>
@@ -35,7 +35,8 @@ namespace bleak.Api.Rest
                 string username = null,
                 string password = null,
                 string accept = null,
-                string contentType = "application/json"
+                string contentType = "application/json",
+                CancellationToken cancellationToken = default
         )
             where TSuccess : class
             where TError : class
@@ -54,11 +55,15 @@ namespace bleak.Api.Rest
             {
                 ManageHeaders(request, headers, username, password, accept, contentType);
 
-                await RenderPayloadAsync(request, summary, payload, serializedPayload, parameters, contentType);
+                await RenderPayloadAsync(request, summary, payload, serializedPayload, parameters, contentType, cancellationToken).ConfigureAwait(false);
 
-                var response = await _httpClient.SendAsync(request);
+                var response = await _httpClient.SendAsync
+                (
+                    request: request,
+                    cancellationToken: cancellationToken
+                ).ConfigureAwait(false);
 
-                await ProcessResponseAsync(response, summary);
+                await ProcessResponseAsync(response, summary, cancellationToken).ConfigureAwait(false);
 
                 return summary;
             }
@@ -111,13 +116,16 @@ namespace bleak.Api.Rest
             }
         }
 
-        private async Task RenderPayloadAsync<TSuccess, TError>(
+        private async Task RenderPayloadAsync<TSuccess, TError>
+        (
             HttpRequestMessage request,
             RestResults<TSuccess, TError> summary,
             object payload,
             string serializedPayload,
             IEnumerable<FormParameter> formParameters,
-            string contentType)
+            string contentType,
+            CancellationToken cancellationToken
+        )
             where TSuccess : class
             where TError : class
         {
@@ -138,20 +146,32 @@ namespace bleak.Api.Rest
                         .Select(p => new KeyValuePair<string, string>(p.Name, p.Value.ToString()))
                 );
                 request.Content = formContent;
+#if NET5_0_OR_GREATER
+                summary.SerializedRequest = await formContent.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#else
                 summary.SerializedRequest = await formContent.ReadAsStringAsync();
+#endif
             }
         }
         
         
-        private async Task ProcessResponseAsync<TSuccess, TError>(
+        private async Task ProcessResponseAsync<TSuccess, TError>
+        (
             HttpResponseMessage response,
-            RestResults<TSuccess, TError> summary)
+            RestResults<TSuccess, TError> summary,
+            CancellationToken cancellationToken
+        )
             where TSuccess : class
             where TError : class
         {
             summary.Status = response.StatusCode;
 
+            // TODO: Later implement a streaming approach for this.
+            #if NET5_0_OR_GREATER
+            string responseText = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            #else
             string responseText = await response.Content.ReadAsStringAsync();
+            #endif
             summary.SerializedResponse = responseText;
 
             if (response.IsSuccessStatusCode)

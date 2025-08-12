@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
@@ -21,6 +22,7 @@ namespace bleak.Api.Rest
         /// <param name="password">The password for basic authentication (optional).</param>
         /// <param name="accept">The value for the Accept header (optional).</param>
         /// <param name="contentType">The value for the Content-Type header (default is "application/json").</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation (optional).</param>
         /// <returns>
         /// A <see cref="RestResults{TSuccess, TError}"/> object containing the results of the REST request.
         /// </returns>
@@ -41,7 +43,8 @@ namespace bleak.Api.Rest
             string username = null,
             string password = null,
             string accept = null,
-            string contentType = "application/json"
+            string contentType = "application/json",
+            CancellationToken cancellationToken = default
         )
             where TSuccess : class
             where TError : class;

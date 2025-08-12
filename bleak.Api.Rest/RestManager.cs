@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace bleak.Api.Rest
 {
-    public partial class RestManager : BaseRestManager, IRestManager, IRestManagerAsync
+    public partial class RestManager : BaseRestManager, IRestManager
     {
         public RestManager(ISerializer serializer, IDeserializer deserializer)
         {
