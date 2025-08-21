@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using System.Net.Http.Headers;
 
 namespace bleak.Api.Rest
 {
@@ -17,10 +18,13 @@ namespace bleak.Api.Rest
         private readonly ISerializer _serializer;
         private readonly IDeserializer _deserializer;
 
-        public RestClient(HttpClient httpClient = null,
-        ISerializer serializer = null,
-         IDeserializer deserializer = null,
-         ILogger logger = null)
+        public RestClient
+        (
+            HttpClient httpClient = null,
+            ISerializer serializer = null,
+            IDeserializer deserializer = null,
+            ILogger logger = null
+        )
         {
             _httpClient = httpClient ?? new HttpClient();
             _serializer = serializer ?? new JsonSerializer();
@@ -59,19 +63,27 @@ namespace bleak.Api.Rest
 
             try
             {
-                ManageHeaders(request, headers, username, password, accept, contentType);
+                ManageHeaders
+                (
+                    request: request,
+                    headers: headers,
+                    username: username,
+                    password: password,
+                    accept: accept,
+                    contentType: contentType
+                );
 
                 await RenderPayloadAsync
                 (
-                    request,
-                    summary,
-                    payload,
-                    serializedPayload,
-                    parameters,
-                    contentType,
-                    cancellationToken
-                )
-                    .ConfigureAwait(false);
+                    request: request,
+                    summary: summary,
+                    payload: payload,
+                    serializedPayload: serializedPayload,
+                    formParameters: parameters,
+                    contentType: contentType,
+                    cancellationToken: cancellationToken,
+                    headers: headers
+                ).ConfigureAwait(false);
 
                 var response = await _httpClient.SendAsync
                 (
@@ -79,7 +91,11 @@ namespace bleak.Api.Rest
                     cancellationToken: cancellationToken
                 ).ConfigureAwait(false);
 
-                await ProcessResponseAsync(response, summary, cancellationToken).ConfigureAwait(false);
+                await ProcessResponseAsync(
+                    response: response,
+                    summary: summary,
+                    cancellationToken: cancellationToken
+                ).ConfigureAwait(false);
 
                 return summary;
             }
@@ -97,38 +113,47 @@ namespace bleak.Api.Rest
             }
         }
 
-        private void ManageHeaders(
+        private void ManageHeaders
+        (
             HttpRequestMessage request,
             IEnumerable<Header> headers,
             string username,
             string password,
             string accept,
-            string contentType)
+            string contentType
+            )
         {
             if (!string.IsNullOrEmpty(username))
             {
                 var byteArray = Encoding.UTF8.GetBytes($"{username}:{password}");
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
             }
 
             if (!string.IsNullOrWhiteSpace(accept))
             {
-                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(accept));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(accept));
             }
 
             if (headers != null)
             {
                 foreach (var header in headers)
                 {
-                    request.Headers.TryAddWithoutValidation(header.Name, header.Value);
+                    if (!request.Headers.TryAddWithoutValidation(header.Name, header.Value))
+                    {
+                        Console.WriteLine($"Header {header.Name} not added to request headers, trying content headers.");
+                        request.Content?.Headers.TryAddWithoutValidation(header.Name, header.Value);
+                    }
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(contentType) &&
+            if
+            (
+                !string.IsNullOrWhiteSpace(contentType) &&
                 request.Content != null &&
-                request.Content.Headers.ContentType == null)
+                request.Content.Headers.ContentType == null
+            )
             {
-                request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             }
 
             _logger?.LogTrace($"Request Headers: {string.Join(", ", request.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))}");
@@ -146,7 +171,8 @@ namespace bleak.Api.Rest
             string serializedPayload,
             IEnumerable<FormParameter> formParameters,
             string contentType,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken,
+            IEnumerable<Header> headers
         )
             where TSuccess : class
             where TError : class
@@ -159,7 +185,12 @@ namespace bleak.Api.Rest
             if (!string.IsNullOrEmpty(serializedPayload))
             {
                 summary.SerializedRequest = serializedPayload;
-                request.Content = new StringContent(serializedPayload, Encoding.UTF8, contentType);
+                var finalContentType =
+                    headers?.FirstOrDefault(h => h.Name.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))?.Value
+                    ?? contentType
+                    ?? "application/json";
+
+                request.Content = new StringContent(serializedPayload, Encoding.UTF8, finalContentType);
             }
             else if (formParameters != null && formParameters.Any())
             {

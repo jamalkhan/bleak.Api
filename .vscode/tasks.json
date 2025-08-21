@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "test",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "${workspaceFolder}/bleak.Api.Rest.Tests/bleak.Api.Rest.Tests.csproj",
+        "--no-build"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

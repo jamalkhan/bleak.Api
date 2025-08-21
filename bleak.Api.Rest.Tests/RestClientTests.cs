@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using bleak.Api.Rest;
 using System;
 using System.Threading.Tasks;
+using System.Reflection.Metadata.Ecma335;
 
 namespace bleak.Api.Rest.Tests;
 
@@ -61,6 +62,35 @@ public class RestClientTests
         Assert.IsTrue(int.Parse(results.Results.id) > 0);
         Assert.IsTrue(results.Results.name == "jamal");
         Assert.IsTrue(results.Results.job == "engineer");
+
+        // Ensure the date is within -24 hours and +24 hours from now.
+        // * I could test more precisely,
+        // * but I'm not testing reqres.in's ability to generate a date;
+        TimeSpan difference = DateTime.Now - results.Results.createdAt;
+        Assert.IsTrue(difference.TotalHours <= 24 && difference.TotalHours >= -24);
+    }
+
+    [TestMethod]
+    public async Task RestClientPostUserAsXMLTest()
+    {
+        var s = "https://reqres.in/api/users";
+        var payload = new PostUserTestPoco{ name="jamal", job="engineer" };
+
+        var restClient = new RestClient();
+        var results = await restClient.ExecuteRestMethodAsync<PostResultUserTestPoco, string>
+            (uri: new Uri(s),
+            verb: HttpVerbs.POST,
+            payload: payload,
+            headers: new Header[]
+            {
+                new() { Name = "x-api-key", Value = "reqres-free-v1" },
+                new() { Name = "Content-Type", Value = "text/xml" }
+            }
+            );
+
+        Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
+        Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
+        Assert.IsTrue(int.Parse(results.Results.id) > 0);
 
         // Ensure the date is within -24 hours and +24 hours from now.
         // * I could test more precisely,
