@@ -64,6 +64,10 @@ This repository currently contains both GitHub Actions and Azure Pipelines confi
 
 NuGet publishing is configured from CI and expects a secret/API key in the respective platform.
 
+## Usage Docs
+
+Detailed examples for REST and SOAP, including patterns derived from `bleak.Martech.SalesforceMarketingCloud`, live in [`docs/http-and-soap-usage.md`](docs/http-and-soap-usage.md).
+
 ## Notes
 
 - The current automated tests are mostly integration-style tests against external services.
