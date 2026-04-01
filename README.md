@@ -1,63 +1,71 @@
-bleak.Api is a tool for managing API access using either REST or SOAP.
+bleak.Api is a lightweight .NET library for calling HTTP APIs and working with request/response payloads as either raw strings or typed POCOs.
 
-RestClient is the main star. SOAP will return at a later date.
+## Status
 
-Usage:
+- `RestClient` is the supported API surface.
+- `RestManager` is still shipped for legacy synchronous callers, but it is obsolete and should not be used for new work.
+- The package currently targets `.NET 8` and publishes as `bleak.Api.Rest`.
 
+## Recommended Usage
+
+```csharp
+using bleak.Api.Rest;
+
+var uri = new Uri("https://example.com/api/users/2");
+var client = new RestClient();
+
+var result = await client.ExecuteRestMethodAsync<MySuccessDto, MyErrorDto>(
+    uri: uri,
+    verb: HttpVerbs.GET,
+    accept: "application/json",
+    cancellationToken: cancellationToken
+);
+
+if (result.Results is not null)
+{
+    Console.WriteLine(result.SerializedResponse);
+}
+else
+{
+    Console.WriteLine(result.UnhandledError ?? result.SerializedResponse);
+}
 ```
-    var s = "https://reqres.in/api/users/2";
-    var restClient = new RestClient();
-    var results = await restClient.ExecuteRestMethodAsync<GetUserTestPoco, string>(uri: new Uri(s), verb: HttpVerbs.GET);
-    Console.WriteLine($"Serialized Request: {results.SerializedRequest}");
-    Console.WriteLine($"Serialized Response: {results.SerializedResponse}");
-    Assert.IsTrue(results.Results.data.id > 0);
-    Assert.IsTrue(results.Results.data.first_name == "Janet");
-    Assert.IsTrue(results.Results.data.last_name == "Weaver");
-    Assert.IsTrue(results.Results.data.avatar == "https://reqres.in/img/faces/2-image.jpg");
-    Assert.IsTrue(results.Results.support.text == "Tired of writing endless social media content? Let Content Caddy generate it for you.");
-```
 
-NOTE: RestManager has been Deprecated. Please use RestClient instead. Synchronous support remains in RestManager, but RestClient ONLY has Async support.
+## API Overview
 
-TSuccess is the type of the object returned on success
-TError is the type of object returned on error.
+`RestClient` supports:
 
-Perfectly valid to use strings. Can also use POCOs. If you want more sophisticated [de]serialization options, you can always implement your own ISerializer
+- `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, and other verb-based HTTP calls
+- typed success and error payloads
+- custom headers
+- basic authentication
+- serializer/deserializer injection via `ISerializer` and `IDeserializer`
+- JSON payloads and form-url-encoded payloads
+- cancellation tokens
 
-## Current Features
-- Basic invocation of REST endpoints.
-- invocations of really any HTTP/HTTPS endpoint, if you know how to serialize/deserialize the data.
-- header management
-- app identication.
-- async and sync methods
-- automagic serialization/deserialization for payloads/responses.
-- 1000000% more friendly to folks who want to build apps quickly and efficiently than RESTSharp. No hate. RESTSharp saved my ass many times. But this is better. Designed to be easier to get started, easier to get data out of the HTTP Request, and easier to work with C# POCOs.
-- The Unlicense. I don't really care how you use it. You're not paying me. And youy're free to fork this as you see fit. Also, welcome to drop a PR to the Github Repo.
+The default serializer is Newtonsoft.Json via `JsonSerializer`.
 
-## Currently possible with some effort:
-- Invoking SOAP calls. See bleak.Martech.Salesforce for more details on how to use SOAP. Expect that work to be brought in at a later date.
-- working with XML based APIs
+## Legacy API
 
-## Currently _technically_ possible but unsupported:
-- cookies. If you read the code, I've stubbed out some cookie management. TBD at some point.
-- Form Data. Also stubbed out.
-- I'm sure a ton of other stuff.
+`RestManager` remains in the package for backward compatibility, especially for synchronous usage, but it is marked obsolete in code and still uses `HttpWebRequest`.
 
-## Tested against some of the following APIs:
-- Salesforce Marketing Cloud (both REST and SOAP)
-- Several Other ESPs and/or CDPs
-- Azure REST APIs.
-- Internal REST Apps.
+For new development:
 
-## Coming in the not too distant future.
-- Proper SOAP support
-- More Unit Tests
-- Integration Tests
-- Automated deployment of NUGET packages (Azure DevOps deployment is currently broken)
-- Retry logic for use with things like OAUTH based authentication. You can totally do OAuth manually right now... just make an AuthRequest, and then attach the auth variable. See this implemeneted in bleak.Martech.Salesforce
+- prefer `RestClient`
+- prefer async flows
+- inject your own `HttpClient` when you need custom lifetime or test control
 
-### If you like what I do, you're welcome to buy me a coffee.
+## CI And Publishing
 
-* Bitcoin Address: bc1qrwysp9a5mqthnz6aygn527xjkg58lcd7u5jdz5
-* Solana Address: 9Y8ZUL1MqXQkE5D2Qj9gx5mgkXkXct22jkQ3Ucj5z5N3
-* Ethereum Address: 0xA38305025bF8D7c9d92F73193CD5A70E9B030208
+This repository currently contains both GitHub Actions and Azure Pipelines configuration:
+
+- GitHub Actions is the primary CI/CD path in the repo today: `.github/workflows/dotnet.yml`
+- Azure Pipelines remains as a compatibility/legacy pipeline definition: `azure-pipelines.yaml`
+
+NuGet publishing is configured from CI and expects a secret/API key in the respective platform.
+
+## Notes
+
+- The current automated tests are mostly integration-style tests against external services.
+- SOAP support is not currently part of this package.
+- If you need more advanced serialization behavior, provide custom `ISerializer` and `IDeserializer` implementations.

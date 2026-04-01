@@ -1,49 +1,60 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: dotnet
 
 on:
   push:
-    branches: [ "prod" ]
+    branches:
+      - prod
   pull_request:
-    branches: [ "prod" ]
+    branches:
+      - prod
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: 8.0.x
+  BUILD_CONFIGURATION: Release
+  PACKAGE_PROJECT: bleak.Api.Rest/bleak.Api.Rest.csproj
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  build-test-pack:
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Read version.txt
-      id: version
-      run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Generate build number
-      id: build-number
-      run: echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+      - name: Read package version prefix
+        shell: bash
+        run: echo "VERSION_PREFIX=$(cat version.txt)" >> "$GITHUB_ENV"
 
-    - name: Set full version
-      id: set-version
-      run: echo "FULL_VERSION=${VERSION}.${BUILD_NUMBER}" >> $GITHUB_ENV
+      - name: Set package version
+        shell: bash
+        run: echo "PACKAGE_VERSION=${VERSION_PREFIX}.${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore
+        run: dotnet restore bleak.Api.sln
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build bleak.Api.sln --configuration $BUILD_CONFIGURATION --no-restore
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    
-    - name: Pack bleak.Api.Rest
-      run: dotnet pack --configuration Release /p:Version=${FULL_VERSION} bleak.Api.Rest --output ./nupkg
-    
-    - name: Publish to NuGet
-      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      - name: Test
+        run: dotnet test bleak.Api.sln --configuration $BUILD_CONFIGURATION --no-build --verbosity normal
+
+      - name: Pack
+        run: dotnet pack $PACKAGE_PROJECT --configuration $BUILD_CONFIGURATION --no-build /p:Version=$PACKAGE_VERSION --output ./artifacts
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bleak-api-rest-nupkg
+          path: ./artifacts/*.nupkg
+
+      - name: Publish to NuGet
+        if: github.event_name == 'push' && github.ref == 'refs/heads/prod'
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
